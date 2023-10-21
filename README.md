@@ -6,7 +6,7 @@ The parsed data can either be written to file or printed to stdout.
 # Installation
 
 ```
-> go get github.com/vanillaiice/snaparser@latest
+> go install github.com/vanillaiice/snaparser/cmd/snaparser@latest
 ```
 
 # Usage
