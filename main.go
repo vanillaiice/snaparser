@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	parser "snaparser/parser"
+	parser "github.com/vanillaiice/snaparser/parser"
 )
 
 func main() {
