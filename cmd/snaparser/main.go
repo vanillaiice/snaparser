@@ -5,9 +5,18 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	parser "github.com/vanillaiice/snaparser/parser"
 )
+
+const TEXT = "TEXT"
+
+func checkIllegalString(str *string) {
+	if strings.Contains(*str, "/") == true {
+		*str = strings.ReplaceAll(*str, "/", "-")
+	}
+}
 
 func main() {
 	user := flag.String("u", "", "extract chats only with specified user")
@@ -25,18 +34,25 @@ func main() {
 	}
 	defer file.Close()
 
+	var writer *bufio.Writer
 	if *user != "" {
 		data, err := parser.ParseUser(file, *user)
 		if err != nil {
 			panic(err)
 		}
+		fmt.Println(len(data))
+		if len(data) == 0 {
+			os.Exit(0)
+		}
+		checkIllegalString(user)
 		userFile, err := os.Create(fmt.Sprintf("%s.txt", *user))
 		if err != nil {
 			panic(err)
 		}
-		writer := bufio.NewWriter(userFile)
+		defer userFile.Close()
+		writer = bufio.NewWriter(userFile)
 		for i := len(data) - 1; i >= 0; i-- {
-			if data[i].MediaType != "TEXT" {
+			if data[i].MediaType != TEXT {
 				continue
 			}
 			str := fmt.Sprintf("%s (%s): %s\n", data[i].From, data[i].Created, data[i].Content)
@@ -54,13 +70,18 @@ func main() {
 		}
 
 		for i := 0; i < len(users); i++ {
+			if len(data[users[i]]) == 0 {
+				continue
+			}
+			checkIllegalString(&users[i])
 			userFile, err := os.Create(fmt.Sprintf("%s.txt", users[i]))
 			if err != nil {
 				panic(err)
 			}
-			writer := bufio.NewWriter(userFile)
+			defer userFile.Close()
+			writer = bufio.NewWriter(userFile)
 			for j := len(data[users[i]]) - 1; j >= 0; j-- {
-				if data[users[i]][j].MediaType != "TEXT" {
+				if data[users[i]][j].MediaType != TEXT {
 					continue
 				}
 				str := fmt.Sprintf("%s (%s): %s\n", data[users[i]][j].From, data[users[i]][j].Created, data[users[i]][j].Content)
