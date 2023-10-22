@@ -111,7 +111,6 @@ func main() {
 				log.Fatalln(err)
 			}
 			defer userFile.Close()
-
 			writer = bufio.NewWriter(userFile)
 		}
 
@@ -137,14 +136,16 @@ func main() {
 				continue
 			}
 
-			checkIllegalString(&users[i])
-			userFile, err := os.Create(fmt.Sprintf("%s.txt", users[i]))
-			if err != nil {
-				log.Fatalln(err)
+			if *writeToFile == true {
+				checkIllegalString(&users[i])
+				userFile, err := os.Create(fmt.Sprintf("%s.txt", users[i]))
+				if err != nil {
+					log.Fatalln(err)
+				}
+				defer userFile.Close()
+				writer = bufio.NewWriter(userFile)
 			}
-			defer userFile.Close()
 
-			writer = bufio.NewWriter(userFile)
 			for j := len(data[users[i]]) - 1; j >= 0; j-- {
 				if data[users[i]][j].MediaType != "TEXT" {
 					continue
