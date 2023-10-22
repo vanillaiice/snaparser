@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -21,6 +22,8 @@ func checkIllegalString(str *string) {
 func main() {
 	user := flag.String("u", "", "extract chats only with specified user")
 	writeToFile := flag.Bool("w", false, "if chats should be written to file")
+	dir := flag.String("d", "", "write files to specified directory")
+	forceDir := flag.Bool("f", false, "if directory does not exist, create it")
 	flag.Parse()
 
 	if flag.Arg(0) == "" {
@@ -34,13 +37,32 @@ func main() {
 	}
 	defer file.Close()
 
+	if *dir != "" {
+		if _, err := os.Stat(*dir); errors.Is(err, os.ErrNotExist) {
+			if *forceDir == true {
+				if err = os.Mkdir(*dir, os.ModePerm); err == nil {
+					err = os.Chdir(*dir)
+					if err != nil {
+						panic(err)
+					}
+				}
+			} else {
+				panic(err)
+			}
+		} else {
+			err = os.Chdir(*dir)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
+
 	var writer *bufio.Writer
 	if *user != "" {
 		data, err := parser.ParseUser(file, *user)
 		if err != nil {
 			panic(err)
 		}
-		fmt.Println(len(data))
 		if len(data) == 0 {
 			os.Exit(0)
 		}
