@@ -28,6 +28,12 @@ Extract chats only from specified user.
 ## ```-w``` (write-to-file)
 If chats should be written to file.
 
+## ```-d``` (directory)
+Write files to specified directory.
+
+## ```-f``` (force-directory-creation)
+If the directory does not exist, create it.
+
 # Author
 
 vanillaiice
