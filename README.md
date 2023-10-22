@@ -11,17 +11,21 @@ The parsed data can either be written to file or printed to stdout.
 
 # Usage
 
+To download your chat history data, follow the guide available on snapchat's [website](https://help.snapchat.com/hc/en-us/articles/7012305371156-How-do-I-download-my-data-from-Snapchat-). You can then do the following:
+
 ```
+// Extract chats only with user 'johndoe' and write chats to file
 > snaparser -u johndoe -w chat_history.json
-> snaparser -u chat_history.json | more
+// Extract all chats and pipe output to more
+> snaparser chat_history.json | more
 ```
 
 # Options
 
-## ```-u```
+## ```-u``` (username)
 Extract chats only from specified user.
 
-## ```-w```
+## ```-w``` (write-to-file)
 If chats should be written to file.
 
 # Author
