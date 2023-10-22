@@ -24,8 +24,10 @@ $ snaparser [flags] [path ...]
 
 // Extract chats only with user 'johndoe' and write chats to file
 $ snaparser -u johndoe -w chat_history.json
-// Extract chats only user 'janedoe' and read chat history file from stdin
+
+// Extract chats only with user 'janedoe' and read chat history file from stdin
 $ cat chat_history.json | snaparser -u janedoe
+
 // Extract all chats and pipe output to more
 $ snaparser chat_history.json | more
 ```
