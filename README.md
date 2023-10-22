@@ -1,38 +1,48 @@
 # Snaparser
 
-Snaparser is a program that parses your snapchat chat history into a human friendly way.
-The parsed data can either be written to file or printed to stdout.
+Snaparser parses snapchat chat history json files to human friendly format.
+The output can be printed to stdout or written to file.
+If no path is provided, stdin is processed.
+If stdin is empty, the program stop sexecution.
+By default, the parsed chat history is printed to stdout.
 
 # Installation
 
 ```
-> go install github.com/vanillaiice/snaparser/cmd/snaparser@latest
+$ go install github.com/vanillaiice/snaparser/cmd/snaparser@latest
 ```
 
 # Usage
 
-To download your chat history data, follow the guide available on snapchat's [website](https://help.snapchat.com/hc/en-us/articles/7012305371156-How-do-I-download-my-data-from-Snapchat-). You can then do the following:
+To download your chat history data, follow the guide available on snapchat's 
+[website](https://help.snapchat.com/hc/en-us/articles/7012305371156-How-do-I-download-my-data-from-Snapchat-). 
+You can then do the following:
 
 ```
+// Generic Usage
+$ snaparser [flags] [path ...]
+
 // Extract chats only with user 'johndoe' and write chats to file
-> snaparser -u johndoe -w chat_history.json
+$ snaparser -u johndoe -w chat_history.json
+// Extract chats only user 'janedoe' and read chat history file from stdin
+$ cat chat_history.json | snaparser -u janedoe
 // Extract all chats and pipe output to more
-> snaparser chat_history.json | more
+$ snaparser chat_history.json | more
 ```
 
-# Options
+# Flags
 
 ## ```-u``` (username)
-Extract chats only from specified user.
+Only extract chats with this user.
 
 ## ```-w``` (write-to-file)
-If chats should be written to file.
+write chats to file.
 
 ## ```-d``` (directory)
-Write files to specified directory.
+Write to this directory.
 
 ## ```-f``` (force-directory-creation)
-If the directory does not exist, create it.
+Create directory if it does not exist.
 
 # Author
 

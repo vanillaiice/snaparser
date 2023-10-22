@@ -1,18 +1,42 @@
+/*
+	Snaparser parses snapchat chat history json files to human friendly format.
+	The output can be printed to stdout or written to file.
+	If no path is provided, stdin is processed.
+	If stdin is empty, the program stop sexecution.
+	By default, the parsed chat history is printed to stdout.
+
+	Usage:
+
+			snaparser [flags] [path ...]
+
+	The options are:
+
+			-u
+					Only extract chats with this user.
+			-w
+					Write chats to file.
+			-d
+					Write to this directory.
+			-f
+					Create directory if it does not exist.
+*/
 package main
 
 import (
 	"bufio"
+	"io"
 	"errors"
 	"flag"
 	"fmt"
 	"os"
 	"strings"
+	"log"
 
 	parser "github.com/vanillaiice/snaparser/parser"
 )
 
-const TEXT = "TEXT"
-
+// checkIllegalString checks if a string contains '/' characters.
+// If yes, they are replaced with '-'
 func checkIllegalString(str *string) {
 	if strings.Contains(*str, "/") == true {
 		*str = strings.ReplaceAll(*str, "/", "-")
@@ -20,61 +44,79 @@ func checkIllegalString(str *string) {
 }
 
 func main() {
-	user := flag.String("u", "", "extract chats only with specified user")
-	writeToFile := flag.Bool("w", false, "if chats should be written to file")
-	dir := flag.String("d", "", "write files to specified directory")
-	forceDir := flag.Bool("f", false, "if directory does not exist, create it")
+	user := flag.String("u", "", "only extract chats with this user")
+	writeToFile := flag.Bool("w", false, "write chats to file")
+	dir := flag.String("d", "", "write to this directory")
+	forceDir := flag.Bool("f", false, "create directory if it does not exist")
 	flag.Parse()
 
-	if flag.Arg(0) == "" {
-		fmt.Println("Usage: sc-data-parser [option] [argument] chat_history.json")
-		os.Exit(1)
+	var in io.Reader
+
+	if filename := flag.Arg(0); filename != "" {
+		f, err := os.Open(filename)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		defer f.Close()
+		in = f
+	} else {
+		fi, err := os.Stdin.Stat()
+		if err != nil {
+			log.Fatalln(err)
+		}
+		if (fi.Mode() & os.ModeCharDevice) == 0 {
+			in = os.Stdin
+		} else {
+			fmt.Fprintln(os.Stderr, "Usage: snaparser [flags] [path ...]")
+			os.Exit(1)
+		}
 	}
 
-	file, err := os.Open(flag.Arg(0))
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer file.Close()
-
-	if *dir != "" {
+	if *writeToFile == true && *dir != "" {
 		if _, err := os.Stat(*dir); errors.Is(err, os.ErrNotExist) {
 			if *forceDir == true {
 				if err = os.Mkdir(*dir, os.ModePerm); err == nil {
 					err = os.Chdir(*dir)
 					if err != nil {
-						panic(err)
+						log.Fatalln(err)
 					}
 				}
 			} else {
-				panic(err)
+				log.Fatalln(err)
 			}
 		} else {
 			err = os.Chdir(*dir)
 			if err != nil {
-				panic(err)
+				log.Fatalln(err)
 			}
 		}
 	}
 
 	var writer *bufio.Writer
 	if *user != "" {
-		data, err := parser.ParseUser(file, *user)
+		data, err := parser.ParseUser(in, *user)
 		if err != nil {
-			panic(err)
+			log.Fatalln(err)
 		}
+		
 		if len(data) == 0 {
+			log.Printf("No chats with user - %s\n", &user)
 			os.Exit(0)
 		}
-		checkIllegalString(user)
-		userFile, err := os.Create(fmt.Sprintf("%s.txt", *user))
-		if err != nil {
-			panic(err)
+
+		if *writeToFile == true {
+			checkIllegalString(user)
+			userFile, err := os.Create(fmt.Sprintf("%s.txt", *user))
+			if err != nil {
+				log.Fatalln(err)
+			}
+			defer userFile.Close()
+
+			writer = bufio.NewWriter(userFile)
 		}
-		defer userFile.Close()
-		writer = bufio.NewWriter(userFile)
+
 		for i := len(data) - 1; i >= 0; i-- {
-			if data[i].MediaType != TEXT {
+			if data[i].MediaType != "TEXT" {
 				continue
 			}
 			str := fmt.Sprintf("%s (%s): %s\n", data[i].From, data[i].Created, data[i].Content)
@@ -84,26 +126,27 @@ func main() {
 				writer.WriteString(str)
 			}
 		}
-		writer.Flush()
 	} else {
-		users, data, err := parser.ParseAll(file)
+		users, data, err := parser.ParseAll(in)
 		if err != nil {
-			panic(err)
+			log.Fatalln(err)
 		}
 
 		for i := 0; i < len(users); i++ {
 			if len(data[users[i]]) == 0 {
 				continue
 			}
+			
 			checkIllegalString(&users[i])
 			userFile, err := os.Create(fmt.Sprintf("%s.txt", users[i]))
 			if err != nil {
-				panic(err)
+				log.Fatalln(err)
 			}
 			defer userFile.Close()
+			
 			writer = bufio.NewWriter(userFile)
 			for j := len(data[users[i]]) - 1; j >= 0; j-- {
-				if data[users[i]][j].MediaType != TEXT {
+				if data[users[i]][j].MediaType != "TEXT" {
 					continue
 				}
 				str := fmt.Sprintf("%s (%s): %s\n", data[users[i]][j].From, data[users[i]][j].Created, data[users[i]][j].Content)
@@ -113,7 +156,10 @@ func main() {
 					writer.WriteString(str)
 				}
 			}
-			writer.Flush()
 		}
+	}
+	
+	if writer != nil && writer.Size() > 0 {
+		writer.Flush()
 	}
 }
