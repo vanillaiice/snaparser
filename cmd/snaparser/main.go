@@ -1,36 +1,36 @@
 /*
-	Snaparser parses snapchat chat history json files to human friendly format.
-	The output can be printed to stdout or written to file.
-	If no path is provided, stdin is processed.
-	If stdin is empty, the program stop sexecution.
-	By default, the parsed chat history is printed to stdout.
+Snaparser parses snapchat chat history json files to human friendly format.
+The output can be printed to stdout or written to file.
+If no path is provided, stdin is processed.
+If stdin is empty, the program stops execution.
+By default, the parsed chat history is printed to stdout.
 
-	Usage:
+Usage:
 
-			snaparser [flags] [path ...]
+	snaparser [flags] [path ...]
 
-	The options are:
+The options are:
 
-			-u
-					Only extract chats with this user.
-			-w
-					Write chats to file.
-			-d
-					Write to this directory.
-			-f
-					Create directory if it does not exist.
+	-u
+			Only extract chats with this user.
+	-w
+			Write chats to file.
+	-d
+			Write to this directory.
+	-f
+			Create directory if it does not exist.
 */
 package main
 
 import (
 	"bufio"
-	"io"
 	"errors"
 	"flag"
 	"fmt"
+	"io"
+	"log"
 	"os"
 	"strings"
-	"log"
 
 	parser "github.com/vanillaiice/snaparser/parser"
 )
@@ -98,7 +98,7 @@ func main() {
 		if err != nil {
 			log.Fatalln(err)
 		}
-		
+
 		if len(data) == 0 {
 			log.Printf("No chats with user - %s\n", &user)
 			os.Exit(0)
@@ -136,14 +136,14 @@ func main() {
 			if len(data[users[i]]) == 0 {
 				continue
 			}
-			
+
 			checkIllegalString(&users[i])
 			userFile, err := os.Create(fmt.Sprintf("%s.txt", users[i]))
 			if err != nil {
 				log.Fatalln(err)
 			}
 			defer userFile.Close()
-			
+
 			writer = bufio.NewWriter(userFile)
 			for j := len(data[users[i]]) - 1; j >= 0; j-- {
 				if data[users[i]][j].MediaType != "TEXT" {
@@ -158,7 +158,7 @@ func main() {
 			}
 		}
 	}
-	
+
 	if writer != nil && writer.Size() > 0 {
 		writer.Flush()
 	}

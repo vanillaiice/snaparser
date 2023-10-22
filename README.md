@@ -3,7 +3,7 @@
 Snaparser parses snapchat chat history json files to human friendly format.
 The output can be printed to stdout or written to file.
 If no path is provided, stdin is processed.
-If stdin is empty, the program stop sexecution.
+If stdin is empty, the program stops execution.
 By default, the parsed chat history is printed to stdout.
 
 # Installation
