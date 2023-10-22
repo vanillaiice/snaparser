@@ -16,12 +16,12 @@ Windows:
 # Compile for linux
 Linux:
 	mkdir -p bin/linux
-	GOOS=linux go build -ldflags="-s -w" -o bin/linux/snaparser cmd/snaparser/main.go
+	GOOS=linux go build -ldflags="-s -w" -o bin/linux/snaparser-linux cmd/snaparser/main.go
 
 # Compile for darwin
 Darwin:
 	mkdir -p bin/darwin
-	GOOS=darwin go build -ldflags="-s -w" -o bin/darwin/snaparser cmd/snaparser/main.go
+	GOOS=darwin go build -ldflags="-s -w" -o bin/darwin/snaparser-darwin cmd/snaparser/main.go
 
 # Compile for all OS
 all: Windows Linux Darwin
