@@ -100,7 +100,7 @@ func main() {
 		}
 
 		if len(data) == 0 {
-			log.Printf("No chats with user - %s\n", &user)
+			log.Printf("No chats with user - %s\n", *user)
 			os.Exit(0)
 		}
 
