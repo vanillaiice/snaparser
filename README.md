@@ -20,31 +20,36 @@ You can then do the following:
 
 ```sh
 # Generic Usage
-$ snaparser [flags] [path ...]
+$ snaparser parse [command options] [arguments...]
 
 # Extract chats only with user 'johndoe' and write chats to file
-$ snaparser -u johndoe -w chat_history.json
+$ snaparser parse -u johndoe -f chat_history.json -w
 
-# Extract chats only with user 'janedoe' and read chat history file from stdin
+# Extract chats only with user 'janedoe', read chat history file from stdin,
+# and print to Stdout
 $ cat chat_history.json | snaparser -u janedoe
 
 # Extract all chats and pipe output to more
-$ snaparser chat_history.json | more
+$ snaparser -f chat_history.json | more
 ```
 
 # Flags
 
-## ```-u``` (username)
-Only extract chats with this user.
+```sh
+NAME:
+   snaparser parse - parse chats
 
-## ```-w``` (write-to-file)
-write chats to file.
+USAGE:
+   snaparser parse [command options] [arguments...]
 
-## ```-d``` (directory)
-Write to this directory.
-
-## ```-f``` (force-directory-creation)
-Create directory if it does not exist.
+OPTIONS:
+   --file FILE, -f FILE                                  read chats from FILE
+   --user value, -u value                                only extract chat with user
+   --write, -w                                           write parsed chats to disk (default: false)
+   --directory DIRECTORY, -d DIRECTORY, --dir DIRECTORY  write parsed chats to DIRECTORY
+   --create, -c                                          create directory if it does not exist (default: false)
+   --help, -h                                            show help
+```
 
 # Author
 
