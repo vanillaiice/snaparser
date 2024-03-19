@@ -8,6 +8,12 @@ endif
 # Compile depending on OS
 os: $(OS_TARGET)
 
+build:
+	go build -ldflags="-s -w" cmd/snaparser/main.go
+
+test:
+	go test ./...
+
 # Compile for windows
 Windows:
 	mkdir -p bin/windows
@@ -23,5 +29,5 @@ Darwin:
 	mkdir -p bin/darwin
 	GOOS=darwin go build -ldflags="-s -w" -o bin/darwin/snaparser-darwin cmd/snaparser/main.go
 
-# Compile for all OS
-all: Windows Linux Darwin
+# Test and compile for all OS
+all: test Windows Linux Darwin

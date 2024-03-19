@@ -18,17 +18,17 @@ To download your chat history data, follow the guide available on snapchat's
 [website](https://help.snapchat.com/hc/en-us/articles/7012305371156-How-do-I-download-my-data-from-Snapchat-). 
 You can then do the following:
 
-```
-// Generic Usage
+```sh
+# Generic Usage
 $ snaparser [flags] [path ...]
 
-// Extract chats only with user 'johndoe' and write chats to file
+# Extract chats only with user 'johndoe' and write chats to file
 $ snaparser -u johndoe -w chat_history.json
 
-// Extract chats only with user 'janedoe' and read chat history file from stdin
+# Extract chats only with user 'janedoe' and read chat history file from stdin
 $ cat chat_history.json | snaparser -u janedoe
 
-// Extract all chats and pipe output to more
+# Extract all chats and pipe output to more
 $ snaparser chat_history.json | more
 ```
 
