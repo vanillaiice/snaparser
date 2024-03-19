@@ -30,7 +30,7 @@ $ snaparser parse -u johndoe -f chat_history.json -w
 $ cat chat_history.json | snaparser -u janedoe
 
 # Extract all chats and pipe output to more
-$ snaparser -f chat_history.json | more
+$ snaparser parse -f chat_history.json | more
 ```
 
 # Flags
