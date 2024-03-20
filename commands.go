@@ -12,9 +12,6 @@ import (
 )
 
 var Parse = &cli.Command{
-	Name:    "parse",
-	Aliases: []string{"p"},
-	Usage:   "parse chats",
 	Flags: []cli.Flag{
 		&cli.StringFlag{
 			Name:    "file",

@@ -20,35 +20,45 @@ You can then do the following:
 
 ```sh
 # Generic Usage
-$ snaparser parse [command options] [arguments...]
+$ snaparser [global options] command [command options] 
 
 # Extract chats only with user 'johndoe' and write chats to file
-$ snaparser parse -u johndoe -f chat_history.json -w
+$ snaparser -u johndoe -f chat_history.json -w
 
 # Extract chats only with user 'janedoe', read chat history file from stdin,
 # and print to Stdout
 $ cat chat_history.json | snaparser -u janedoe
 
 # Extract all chats and pipe output to more
-$ snaparser parse -f chat_history.json | more
+$ snaparser -f chat_history.json | more
 ```
 
 # Flags
 
 ```sh
 NAME:
-   snaparser parse - parse chats
+   snaparser - parse snapchat chat history to human friendly format
 
 USAGE:
-   snaparser parse [command options] [arguments...]
+   snaparser [global options] command [command options] 
 
-OPTIONS:
+VERSION:
+   v0.1.0
+
+AUTHOR:
+   vanillaiice <vanillaiice1@proton.me>
+
+COMMANDS:
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
    --file FILE, -f FILE                                  read chats from FILE
    --user value, -u value                                only extract chat with user
    --write, -w                                           write parsed chats to disk (default: false)
    --directory DIRECTORY, -d DIRECTORY, --dir DIRECTORY  write parsed chats to DIRECTORY
    --create, -c                                          create directory if it does not exist (default: false)
    --help, -h                                            show help
+   --version, -v                                         print the version
 ```
 
 # Author
