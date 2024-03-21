@@ -1,9 +1,7 @@
-package snaparser_test
+package snaparser
 
 import (
 	"testing"
-
-	"github.com/vanillaiice/snaparser"
 )
 
 func TestCheckIllegalString(t *testing.T) {
@@ -47,7 +45,7 @@ func TestCheckIllegalString(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			input := tc.input
-			snaparser.CheckIllegalString(&input)
+			checkIllegalString(&input)
 			if input != tc.expected {
 				t.Errorf("CheckIllegalString(%q) = %q, expected %q", tc.input, input, tc.expected)
 			}

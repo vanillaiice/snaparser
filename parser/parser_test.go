@@ -64,7 +64,7 @@ func TestParseAll(t *testing.T) {
 		}},
 	}
 
-	users, data, err := parser.ParseAll(bytes.NewBufferString(validJSON))
+	data, err := parser.ParseAll(bytes.NewBufferString(validJSON))
 	if err != nil {
 		t.Errorf("ParseAll() error = %v", err)
 		return
@@ -74,20 +74,15 @@ func TestParseAll(t *testing.T) {
 		t.Errorf("ParseAll() data mismatch (-got +want):\n%s", diff)
 	}
 
-	expectedUsers := []string{"user1", "user2"}
-	if diff := cmp.Diff(users, expectedUsers); diff != "" {
-		t.Errorf("ParseAll() users mismatch (-got +want):\n%s", diff)
-	}
-
 	// Test case: invalid JSON input
 	invalidJSON := `invalid json`
-	_, _, err = parser.ParseAll(bytes.NewBufferString(invalidJSON))
+	_, err = parser.ParseAll(bytes.NewBufferString(invalidJSON))
 	if err == nil {
 		t.Error("ParseAll() expected error for invalid JSON input, got nil")
 	}
 
 	errReader := &errorReader{}
-	_, _, err = parser.ParseAll(errReader)
+	_, err = parser.ParseAll(errReader)
 	if err == nil {
 		t.Error("ParseAll() expected error for failed io.Reader, got nil")
 	}

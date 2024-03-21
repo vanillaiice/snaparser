@@ -19,11 +19,11 @@ func main() {
 	app := &cli.App{
 		Name:    "snaparser",
 		Suggest: true,
-		Version: "v0.1.0",
+		Version: "v0.1.1",
 		Authors: []*cli.Author{{Name: "vanillaiice", Email: "vanillaiice1@proton.me"}},
 		Usage:   "parse snapchat chat history to human friendly format",
-		Flags:   snaparser.Parse.Flags,
-		Action:  snaparser.Parse.Action,
+		Flags:   snaparser.ParseCommand.Flags,
+		Action:  snaparser.ParseCommand.Action,
 	}
 
 	if err := app.Run(os.Args); err != nil {
