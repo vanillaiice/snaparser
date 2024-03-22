@@ -1,9 +1,6 @@
 # Snaparser
 
 Snaparser parses snapchat chat history json files to human friendly format.
-The output can be printed to stdout or written to file.
-If no path is provided, stdin is processed.
-If stdin is empty, the program stops execution.
 By default, the parsed chat history is printed to stdout.
 
 # Installation
@@ -43,7 +40,7 @@ USAGE:
    snaparser [global options] command [command options] 
 
 VERSION:
-   v0.1.0
+   v0.1.2
 
 AUTHOR:
    vanillaiice <vanillaiice1@proton.me>
@@ -52,11 +49,12 @@ COMMANDS:
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --file FILE, -f FILE                                  read chats from FILE
+   --file FILE, -f FILE                                  read chats from FILE (use '-' for stdin)
+   --directory DIRECTORY, -d DIRECTORY, --dir DIRECTORY  write parsed chats to DIRECTORY
    --user value, -u value                                only extract chat with user
    --write, -w                                           write parsed chats to disk (default: false)
-   --directory DIRECTORY, -d DIRECTORY, --dir DIRECTORY  write parsed chats to DIRECTORY
    --create, -c                                          create directory if it does not exist (default: false)
+   --color, -l                                           write colored output (default: false)
    --help, -h                                            show help
    --version, -v                                         print the version
 ```
