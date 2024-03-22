@@ -16,7 +16,7 @@ func main() {
 	app := &cli.App{
 		Name:    "snaparser",
 		Suggest: true,
-		Version: "v0.1.2",
+		Version: "v0.1.3",
 		Authors: []*cli.Author{{Name: "vanillaiice", Email: "vanillaiice1@proton.me"}},
 		Usage:   "parse snapchat chat history to human friendly format",
 		Flags:   snaparser.ParseCommand.Flags,
