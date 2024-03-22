@@ -1,6 +1,7 @@
 package snaparser
 
 import (
+	"bufio"
 	"errors"
 	"io"
 	"os"
@@ -26,6 +27,11 @@ var flags = []cli.Flag{
 		Usage:    "read chats from `FILE` (use '-' for stdin)",
 		Required: true,
 	},
+	&cli.PathFlag{
+		Name:    "directory",
+		Aliases: []string{"d", "dir"},
+		Usage:   "write parsed chats to `DIRECTORY`",
+	},
 	&cli.StringFlag{
 		Name:    "user",
 		Aliases: []string{"u"},
@@ -36,22 +42,22 @@ var flags = []cli.Flag{
 		Aliases: []string{"w"},
 		Usage:   "write parsed chats to disk",
 	},
-	&cli.PathFlag{
-		Name:    "directory",
-		Aliases: []string{"d", "dir"},
-		Usage:   "write parsed chats to `DIRECTORY`",
-	},
 	&cli.BoolFlag{
 		Name:    "create",
 		Aliases: []string{"c"},
 		Usage:   "create directory if it does not exist",
 	},
+	&cli.BoolFlag{
+		Name:    "color",
+		Aliases: []string{"l"},
+		Usage:   "write colored output",
+	},
 }
 
 // parseFlags is a struct containing flags provided by the cli
 type parseFlags struct {
-	file, dir, user string
-	write, create   bool
+	file, dir, user          string
+	write, create, withColor bool
 }
 
 // parseFunc parses snapchat chat history according to the provided flags
@@ -108,17 +114,23 @@ var parseFunc = func(parseFlags *parseFlags) error {
 					return err
 				}
 				defer f.Close()
-				w = f
+				w = bufio.NewWriter(f)
 			}
 
-			for j := len(content) - 1; j >= 0; j-- {
-				if err = writeData(&content[j], w); err != nil {
-					return err
+			if err = writeContent(w, content, parseFlags.withColor); err != nil {
+				return err
+			}
+
+			if ww, ok := w.(*bufio.Writer); ok {
+				if ww != nil && ww.Size() > 0 {
+					if err := ww.Flush(); err != nil {
+						return err
+					}
 				}
 			}
 		}
 	} else {
-		data, err := parser.ParseUser(r, parseFlags.user)
+		content, err := parser.ParseUser(r, parseFlags.user)
 		if err != nil {
 			return err
 		}
@@ -132,10 +144,8 @@ var parseFunc = func(parseFlags *parseFlags) error {
 			w = f
 		}
 
-		for i := len(data) - 1; i >= 0; i-- {
-			if err = writeData(&data[i], w); err != nil {
-				return err
-			}
+		if err = writeContent(w, content, parseFlags.withColor); err != nil {
+			return err
 		}
 	}
 
@@ -147,11 +157,12 @@ var ParseCommand = &cli.Command{
 	Flags: flags,
 	Action: func(ctx *cli.Context) error {
 		parseFlags := &parseFlags{
-			file:   ctx.String("file"),
-			dir:    ctx.Path("dir"),
-			user:   ctx.String("user"),
-			write:  ctx.Bool("write"),
-			create: ctx.Bool("create"),
+			file:      ctx.String("file"),
+			dir:       ctx.Path("dir"),
+			user:      ctx.String("user"),
+			write:     ctx.Bool("write"),
+			create:    ctx.Bool("create"),
+			withColor: ctx.Bool("color"),
 		}
 
 		return parseFunc(parseFlags)
