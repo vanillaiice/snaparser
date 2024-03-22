@@ -40,7 +40,7 @@ USAGE:
    snaparser [global options] command [command options] 
 
 VERSION:
-   v0.1.2
+   v0.1.3
 
 AUTHOR:
    vanillaiice <vanillaiice1@proton.me>
