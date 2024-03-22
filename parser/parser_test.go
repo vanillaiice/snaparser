@@ -43,7 +43,7 @@ func TestParseAll(t *testing.T) {
         ]
     }`
 
-	expected := map[string][]parser.Content{
+	expected := map[string][]*parser.Content{
 		"user1": {{
 			From:               "user1",
 			MediaType:          "Text",
@@ -114,7 +114,7 @@ func TestParseUser(t *testing.T) {
         ]
     }`
 
-	expected := []parser.Content{{
+	expected := []*parser.Content{{
 		From:               "user1",
 		MediaType:          "Text",
 		Created:            "2023-03-19T12:34:56Z",

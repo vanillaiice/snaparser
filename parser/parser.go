@@ -1,4 +1,4 @@
-// Package parser parses a snapchat chat history json file to a struct
+// Package parser parses snapchat chat history from a json file to a struct.
 package parser
 
 import (
@@ -12,39 +12,34 @@ type Content struct {
 	From               string
 	MediaType          string `json:"Media Type"`
 	Created            string
-	Content            string //`json:",omitempty"`
+	Content            string `json:",omitempty"`
 	ConversationTitle  string `json:"Conversation Title"`
 	IsSender           bool   `json:"isSender"`
 	CreatedMicrosecond int64  `json:"Created(microseconds)"`
 }
 
-// ParseAll parses the chat history.
-// It returns an array with all usernames, a map of usernames and Content array,
-// and any error encountered.
-func ParseAll(in io.Reader) (data map[string][]Content, err error) {
-	inByte, err := io.ReadAll(in)
+// ParseAll parses the chat history.It returns a map of usernames
+// a slice of Content, and any error encountered.
+func ParseAll(r io.Reader) (data map[string][]*Content, err error) {
+	in, err := io.ReadAll(r)
 	if err != nil {
 		return
 	}
-
-	if err = json.Unmarshal(inByte, &data); err != nil {
-		return
-	}
-
+	err = json.Unmarshal(in, &data)
 	return
 }
 
 // ParseUser parses the chat history with one user.
 // It returns a Content array, and any encountered error.
-func ParseUser(in io.Reader, user string) (content []Content, err error) {
-	var data map[string][]Content
+func ParseUser(r io.Reader, user string) (content []*Content, err error) {
+	var data map[string][]*Content
 
-	inByte, err := io.ReadAll(in)
+	in, err := io.ReadAll(r)
 	if err != nil {
 		return
 	}
 
-	if err = json.Unmarshal(inByte, &data); err != nil {
+	if err = json.Unmarshal(in, &data); err != nil {
 		return
 	}
 
