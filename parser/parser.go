@@ -18,8 +18,8 @@ type Content struct {
 	CreatedMicrosecond int64  `json:"Created(microseconds)"`
 }
 
-// ParseAll parses the chat history.It returns a map of usernames
-// a slice of Content, and any error encountered.
+// ParseAll parses the chat history. It returns a map of usernames,
+// a Content slice, and any error encountered.
 func ParseAll(r io.Reader) (data map[string][]*Content, err error) {
 	in, err := io.ReadAll(r)
 	if err != nil {
@@ -30,7 +30,7 @@ func ParseAll(r io.Reader) (data map[string][]*Content, err error) {
 }
 
 // ParseUser parses the chat history with one user.
-// It returns a Content array, and any encountered error.
+// It returns a Content slice, and any encountered error.
 func ParseUser(r io.Reader, user string) (content []*Content, err error) {
 	var data map[string][]*Content
 
@@ -43,11 +43,10 @@ func ParseUser(r io.Reader, user string) (content []*Content, err error) {
 		return
 	}
 
-	for k := range data {
-		if k == user {
-			return data[k], nil
-		}
+	content, ok := data[user]
+	if !ok {
+		return nil, fmt.Errorf("no chats with user: %s", user)
 	}
 
-	return nil, fmt.Errorf("no chats with user: %s", user)
+	return
 }
