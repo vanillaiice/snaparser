@@ -16,7 +16,7 @@ const Empty = ""
 // Stdin represents receiving input from standard input
 const Stdin = "-"
 
-// ErrNoInput means that no snapchat history file was provided
+// ErrNoInput means that no snapchat chat history file was provided
 var ErrNoInput = errors.New("no input file provided")
 
 // flags represent the flags used by the cli
