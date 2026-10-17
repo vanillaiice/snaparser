@@ -3,15 +3,27 @@
 Snaparser turns Snapchat exports into a searchable local archive.
 The parser, SQLite database, and HTMX frontend run in one Go binary.
 
-Create the database from an unzipped Snapchat export and open the embedded chat
-browser in one command:
+Start the browser without supplying paths:
+
+```sh
+go run ./cmd/snaparser serve
+# http://127.0.0.1:8080
+```
+
+If there is no existing archive, the browser opens setup. Enter the unzipped
+Snapchat export path or use **Browse folders**, then import it. Processing runs
+in the background, and the archive opens automatically when it finishes. The
+folder browser reads folders on the machine running Snaparser.
+
+The **Archive** button lets you select another export or **Rebuild archive**
+from the saved export. Both actions refresh the database and attachment index
+without restarting the server. A failed operation preserves the previous archive.
+The selected path is saved in the database and reused on later launches.
+
+To import immediately from the command line:
 
 ```sh
 go run ./cmd/snaparser serve --data ./data
-# http://127.0.0.1:8080
-
-# Later, reuse the database without reimporting:
-go run ./cmd/snaparser serve
 ```
 
 `--data` requires the unchanged export root containing `json/` and `chat_media/`.
@@ -82,8 +94,10 @@ omitted; IDs are never matched across dates. The index is a snapshot of filename
 rebuild it if the media directory changes. The WebUI displays images, video and
 audio controls, and download links for other file types. Missing media displays
 an unavailable placeholder. Media bytes stay in the export; paths and files are
-not copied into SQLite. Restart the viewer after importing another export.
-Archives imported before source tracking need reimporting to enable media.
+not copied into SQLite. Browser imports switch the viewer and media index together.
+After an import from a separate CLI process, restart the viewer. If the export
+moves, use **Archive** to select its new location and rebuild. Archives imported
+before source tracking need reimporting to enable media.
 
 The import implementation follows this sequence:
 
@@ -136,7 +150,10 @@ To download your chat history data, follow the guide available on snapchat's
 You can then do the following:
 
 ```sh
-# Import the unchanged export and start the viewer
+# Choose the export in the browser (or reuse an existing archive)
+snaparser serve
+
+# Import the unchanged export immediately and start the viewer
 snaparser serve --data /path/to/snapchat-export
 
 # Import without starting the viewer
@@ -176,9 +193,14 @@ shutdown_timeout = "5s"
 ```
 
 These are the defaults. The server binds to loopback. An empty `data` value
-reuses the database when serving; `import` requires a nonempty export path.
+reuses an existing database when serving, or opens browser setup if the selected
+database is missing or has no imported archive. A missing database is created
+after a valid export is chosen.
+`import` requires a nonempty export path.
 **Setting `data` in TOML imports that export each time `serve` runs, replacing the
-selected archive.** To reuse the database while keeping that setting in the file:
+selected archive.** Browser selections update the database's saved source; they
+do not rewrite your TOML file. To reuse the database while keeping that setting
+in the file:
 
 ```sh
 snaparser serve --config archive.toml --data=""

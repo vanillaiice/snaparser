@@ -4,6 +4,7 @@ package frontend
 import (
 	"bytes"
 	"context"
+	"crypto/rand"
 	"database/sql"
 	"embed"
 	"errors"
@@ -58,11 +59,39 @@ func New(store Store) (http.Handler, error) {
 		return nil, errors.New("frontend: a database store is required")
 	}
 
-	templates, err := template.New("archive").Funcs(template.FuncMap{
+	exportDirectory, err := store.GetExportDirectory(context.Background())
+	if err != nil {
+		return nil, fmt.Errorf("read archive source: %w", err)
+	}
+
+	var mediaDirectory string
+
+	var mediaIndex parser.MediaIndex
+
+	if exportDirectory != "" {
+		mediaDirectory = filepath.Join(exportDirectory, "chat_media")
+
+		mediaIndex, err = parser.NewMediaIndex(mediaDirectory)
+		if err != nil {
+			return nil, fmt.Errorf("load archive media (keep the export in its original location): %w", err)
+		}
+	}
+
+	return newWithMedia(store, mediaDirectory, mediaIndex, false)
+}
+
+func parseTemplates() (*template.Template, error) {
+	return template.New("archive").Funcs(template.FuncMap{
 		"number": number,
 		"date":   date,
 		"label":  label,
 	}).ParseFS(files, "templates/*.html")
+}
+
+// Prepare a viewer before importing, so committing data and replacing its media
+// snapshot can happen together under the managed archive's request lock.
+func newWithMedia(store Store, mediaDirectory string, mediaIndex parser.MediaIndex, managed bool) (http.Handler, error) {
+	templates, err := parseTemplates()
 	if err != nil {
 		return nil, fmt.Errorf("parse frontend templates: %w", err)
 	}
@@ -72,20 +101,13 @@ func New(store Store) (http.Handler, error) {
 		return nil, err
 	}
 
-	h := &handler{store: store, templates: templates}
-
-	exportDirectory, err := store.GetExportDirectory(context.Background())
-	if err != nil {
-		return nil, fmt.Errorf("read archive source: %w", err)
+	h := &handler{
+		store: store, templates: templates, managed: managed,
+		mediaDirectory: mediaDirectory, mediaIndex: mediaIndex,
 	}
 
-	if exportDirectory != "" {
-		h.mediaDirectory = filepath.Join(exportDirectory, "chat_media")
-
-		h.mediaIndex, err = parser.NewMediaIndex(h.mediaDirectory)
-		if err != nil {
-			return nil, fmt.Errorf("load archive media (keep the export in its original location): %w", err)
-		}
+	if managed {
+		h.mediaVersion = rand.Text()
 	}
 
 	mux := http.NewServeMux()
@@ -99,23 +121,31 @@ func New(store Store) (http.Handler, error) {
 	mux.HandleFunc("POST /theme", h.setTheme)
 	mux.HandleFunc("GET /media/{filename}", h.serveMedia)
 
+	return secure(mux), nil
+}
+
+func secure(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("Referrer-Policy", "no-referrer")
 		w.Header().Set("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
 
-		mux.ServeHTTP(w, r)
-	}), nil
+		next.ServeHTTP(w, r)
+	})
 }
 
 type handler struct {
+	managed        bool
 	store          Store
 	templates      *template.Template
 	mediaDirectory string
 	mediaIndex     parser.MediaIndex
+	mediaVersion   string
 }
 
 type page struct {
+	Setup              *setupPage
+	CanManage          bool
 	Section            string
 	Title              string
 	Filter             string
@@ -310,6 +340,8 @@ func (h *handler) archive(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *handler) render(w http.ResponseWriter, r *http.Request, p page, status int) {
+	p.CanManage = h.managed
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-store")
 	w.Header().Set("Vary", "HX-Request, HX-Target, HX-History-Restore-Request, Cookie")

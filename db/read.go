@@ -12,6 +12,15 @@ type rowScanner interface {
 	Scan(...any) error
 }
 
+// HasImport distinguishes an initialized archive from a database with only schema.
+func (d *DB) HasImport(ctx context.Context) (bool, error) {
+	var imported bool
+
+	err := d.conn.QueryRowContext(ctx, "select exists(select 1 from import_history)").Scan(&imported)
+
+	return imported, err
+}
+
 // GetExportDirectory returns the absolute source root saved during import.
 // An empty result means the archive predates source tracking or was imported
 // programmatically without a source directory.

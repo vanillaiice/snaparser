@@ -19,6 +19,11 @@
 - Optional TOML configuration through urfave/cli v3 and its TOML value sources,
   with explicit CLI flags taking precedence over the file and built-in defaults.
 - Configurable HTTP and graceful-shutdown timeouts.
+- Browser setup when no archive exists, with an export path field and server-side
+  folder browser, background import progress, and automatic navigation to the app.
+- Archive controls to select another export or rebuild from the saved source
+  without restarting. Failed operations preserve the working archive and media.
+- Recovery through folder reselection when a saved export has moved.
 - Release archives for Linux, macOS, and Windows on amd64 and arm64, with an
   example configuration, documentation, licenses, and SHA-256 checksums.
 

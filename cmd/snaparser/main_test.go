@@ -231,3 +231,21 @@ func TestServeDataImportsBeforeStartingServer(t *testing.T) {
 		t.Fatalf("serve --data must create and populate the archive first: %v", err)
 	}
 }
+
+func TestServeWithoutDataOrDatabaseReachesSetupServer(t *testing.T) {
+	t.Chdir(t.TempDir())
+
+	app := newApp()
+
+	app.Writer = &bytes.Buffer{}
+
+	// Reach server startup without binding a port or creating the default DB.
+	err := app.Run(context.Background(), []string{"snaparser", "serve", "--listen", "invalid-address"})
+	if err == nil || !strings.Contains(err.Error(), "missing port") {
+		t.Fatalf("unconfigured serve must start the setup frontend: %v", err)
+	}
+
+	if _, err := os.Stat("snaparser.db"); !os.IsNotExist(err) {
+		t.Fatal("unconfigured startup created a database before folder selection")
+	}
+}

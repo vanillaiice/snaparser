@@ -46,9 +46,13 @@ func (h *handler) attachments(chat parser.Chat) []attachment {
 			kind = "audio"
 		}
 
-		items = append(items, attachment{
-			URL: "/media/" + url.PathEscape(name), Kind: kind,
-		})
+		target := "/media/" + url.PathEscape(name)
+
+		if h.mediaVersion != "" {
+			target += "?v=" + h.mediaVersion
+		}
+
+		items = append(items, attachment{URL: target, Kind: kind})
 	}
 
 	return items
@@ -58,6 +62,13 @@ func (h *handler) serveMedia(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", "private, no-store")
 
 	name := r.PathValue("filename")
+
+	// An older page must not load a different export's file with the same name.
+	if version := r.URL.Query().Get("v"); version != "" && version != h.mediaVersion {
+		http.NotFound(w, r)
+
+		return
+	}
 
 	if h.mediaDirectory == "" || name == "" || name != filepath.Base(name) || strings.ContainsAny(name, `/\`) {
 		http.NotFound(w, r)

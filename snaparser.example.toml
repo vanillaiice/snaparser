@@ -1,7 +1,8 @@
 # Copy to snaparser.toml in your working directory, or pass --config PATH.
 # CLI flags override these values. Relative paths use the working directory.
 
-# Leave empty to reuse the archive when serving. A nonempty value imports this
+# Leave empty to reuse an existing archive, or select an export in browser setup.
+# A nonempty value imports this
 # export on every `serve` invocation, replacing the selected archive.
 # `import` requires a nonempty data path here or on the command line.
 data = ""

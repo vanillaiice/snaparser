@@ -131,28 +131,12 @@ func serve(ctx context.Context, c *cli.Command) error {
 		}
 	}
 
-	path := c.String("db")
-
-	info, err := os.Stat(path)
-	if err != nil {
-		return fmt.Errorf("open archive %q: %w; create it with 'snaparser serve --data /path/to/export', or select an existing database with --db", path, err)
-	}
-
-	if !info.Mode().IsRegular() {
-		return fmt.Errorf("archive %q must be a database file", path)
-	}
-
-	store, err := db.Open(path)
-	if err != nil {
-		return fmt.Errorf("open archive: %w", err)
-	}
-
-	defer store.Close()
-
-	viewer, err := frontend.New(store)
+	viewer, err := frontend.OpenArchive(ctx, c.String("db"))
 	if err != nil {
 		return err
 	}
+
+	defer viewer.Close()
 
 	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 

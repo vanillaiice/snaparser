@@ -1,11 +1,13 @@
 # Embedded archive browser
 
-Start directly from an unzipped Snapchat export; this creates the SQLite archive
-and starts the viewer in one command:
+Start with no paths to choose an export in the browser, or import immediately
+from an unzipped Snapchat export:
 
 ```sh
+go run ./cmd/snaparser serve
+# Open http://127.0.0.1:8080 and select an export if no archive exists.
+
 go run ./cmd/snaparser serve --data ./data
-# Open http://127.0.0.1:8080
 
 # On subsequent runs, reuse the imported database without importing again:
 go run ./cmd/snaparser serve
@@ -26,29 +28,49 @@ with `go run ./cmd/snaparser import --data ./data --db snaparser.db`.
 `--listen` changes the default `127.0.0.1:8080` address. The CLI also loads
 optional `snaparser.toml` configuration, or a file selected by `--config`.
 Explicit flags override TOML. See the root README and `snaparser.example.toml`
-for paths and server timeout settings. Without `--data`, the
-command requires an existing database file. Opening it applies the existing
-database package's migrations. Keep the source export at its imported location;
-viewer startup aborts if its recorded media directory cannot be read. Archives
-without a recorded source still display chats; reimport from the export root to
-enable attachments. An empty archive gets a welcome state. There is
-no demo data, and the viewer has no HTTP import endpoint.
+for paths and server timeout settings. If the database is missing or has no
+imported archive, the server presents setup. A missing database is created only
+after a valid export is selected. Existing archives are reopened
+and migrated. A missing saved media directory opens recovery setup so the export
+can be reselected. Archives without a recorded source can still display chats;
+select the export folder to enable attachments.
 
-To integrate the browser with another server, mount the handler at `/`:
+The CLI uses the managed handler:
 
 ```go
-viewer, err := frontend.New(database) // *db.DB satisfies frontend.Store
+archive, err := frontend.OpenArchive(ctx, "snaparser.db")
 if err != nil {
     return err
 }
-mux.Handle("/", viewer)
+defer archive.Close() // after the HTTP server shuts down
+mux.Handle("/", archive)
 ```
 
-The caller owns the database and HTTP server lifecycle. The existing database
-package remains the only data access layer. The frontend doesn't access its
-connection, modify its schema, or perform imports. Its Store interface also lets
-another server supply its own adapter for chats, snaps, friends, calls, account
-history, account/profile details, and the archive source.
+`OpenArchive` owns the database connection and background import jobs. It adds a
+setup screen with a path field and directory browser, plus an **Archive** button
+for switching exports and rebuilding from the currently saved source. The folder
+browser lists directories on the machine running the server; files are not
+uploaded from the browser. CLI/config selections continue to work.
+
+Imports validate the complete export and prepare the media index before changing
+the database. The existing `db.Import` API replaces data atomically. The managed
+handler pauses archive-page requests during the commit and switches its database/media
+snapshot together. Media playback continues using its immutable source snapshot. Parsing/indexing happen outside that request lock. Failed
+imports leave the old data, source, viewer, and media snapshot in place. Old pages'
+attachment URLs cannot load another export's same-named media after a switch.
+
+`POST /archive/import` and `POST /archive/rebuild` start one background job at a
+time and redirect to a progress screen. HTMX polls `GET /setup/status`; completion
+opens the app automatically, while errors return to the folder form. Native forms
+work without JavaScript, with refresh-based progress. Disconnecting the initiating
+request does not cancel the import. Mutating routes use Go's same-origin browser
+request protection. Closing the managed handler cancels and waits for its import
+job before closing the database.
+
+For a read-only integration with an externally owned store, continue to use
+`frontend.New(database)`. Its caller owns the database lifecycle, and it does not
+expose folder selection or rebuild endpoints. `*db.DB` satisfies the `Store`
+interface; another server can supply an adapter. Both handlers mount at `/`.
 
 The handler serves complete Go `html/template` documents for normal requests
 and `workspace` fragments for HTMX. Search replaces only `#archive`, preserving
@@ -94,8 +116,9 @@ attachments are supported. Snapchat `NOTE` messages use audio controls even when
 their files have an `.mp4` extension. Missing files retain the unavailable state.
 `/media/{filename}` reads only regular files inside the recorded `chat_media`
 directory, supports HEAD and byte ranges for playback, and disables caching.
-Restart the viewer after importing another export. Media files are not embedded
-or copied to the database.
+Browser selection/rebuild actions refresh the viewer automatically. Restart the
+viewer after importing through a separate CLI process. Media files are not
+embedded or copied to the database.
 
 All application assets use `go:embed`: plain CSS, an SVG icon, and the unmodified
 [HTMX 2.0.11 distribution](https://htmx.org/docs/#installing), with its license

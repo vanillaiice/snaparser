@@ -1,0 +1,79 @@
+{{define "setup"}}
+<div class="setup-scroll">
+  <section class="setup-panel" aria-labelledby="messages-title">
+    <header class="setup-heading">
+      <h1 id="messages-title" tabindex="-1">{{if .Setup.HasArchive}}Manage archive{{else}}Open your Snapchat export{{end}}</h1>
+      <p>Choose the unzipped export folder containing <code>json/</code> and <code>chat_media/</code>.</p>
+      <span id="navigation-loading" class="htmx-indicator" role="status">Loading…</span>
+      {{if .Setup.HasArchive}}<a class="text-link" href="/" hx-boost="false">← Back to archive</a>{{end}}
+    </header>
+
+    {{with .Setup}}
+      {{if .Processing}}
+        {{template "setup-status" .}}
+      {{else}}
+        {{if .Error}}<div class="setup-error" role="alert">{{.Error}}</div>{{end}}
+
+        <form class="setup-form" action="/archive/import" method="post" hx-boost="false">
+          <label for="export-directory">Export folder</label>
+          <p id="folder-help">Select a folder on the machine running Snaparser.</p>
+          <input id="export-directory" name="directory" type="text" value="{{.Directory}}" required
+                 placeholder="/path/to/snapchat-export" aria-describedby="folder-help" autocomplete="off" spellcheck="false">
+          <div class="setup-actions">
+            <button class="search-button" type="submit">{{if .HasArchive}}Import selected folder{{else}}Import and open archive{{end}}</button>
+            <a class="plain-button" href="{{.BrowseURL}}" hx-boost="false">Browse folders</a>
+          </div>
+        </form>
+
+        {{if .Browsing}}
+        <section class="folder-browser" aria-labelledby="folder-browser-title">
+          <h2 id="folder-browser-title">Choose a folder</h2>
+          <form class="folder-location" action="/setup" method="get" hx-boost="false">
+            <label class="sr-only" for="browse-path">Browse location</label>
+            <input id="browse-path" name="browse" type="text" value="{{.BrowsePath}}" required autocomplete="off" spellcheck="false">
+            <button class="plain-button" type="submit">Go</button>
+          </form>
+          {{if .ParentURL}}<a class="text-link folder-parent" href="{{.ParentURL}}" hx-boost="false">↑ Parent folder</a>{{end}}
+          {{if .BrowseError}}
+            <p role="alert">{{.BrowseError}}</p>
+          {{else}}
+            <ul class="folder-list">
+              {{range .Folders}}<li><a href="{{.URL}}" hx-boost="false">{{.Name}} <span aria-hidden="true">→</span></a></li>
+              {{else}}<li class="folder-empty">No subfolders.</li>{{end}}
+            </ul>
+            {{if .MoreFolders}}<p>Showing the first 200 folders. Enter a more specific path to find another folder.</p>{{end}}
+            <form action="/archive/import" method="post" hx-boost="false">
+              <input type="hidden" name="directory" value="{{.BrowsePath}}">
+              <button class="search-button" type="submit">Use this folder</button>
+            </form>
+          {{end}}
+        </section>
+        {{end}}
+
+        {{if .CanRebuild}}
+        <section class="setup-rebuild">
+          <h2>Rebuild current archive</h2>
+          <p>Import the saved export again and refresh its attachments.</p>
+          <p class="setup-path">{{.CurrentDirectory}}</p>
+          <form action="/archive/rebuild" method="post" hx-boost="false">
+            <button class="plain-button" type="submit">Rebuild archive</button>
+          </form>
+        </section>
+        {{end}}
+      {{end}}
+    {{end}}
+  </section>
+</div>
+{{end}}
+
+{{define "setup-status"}}
+  <div id="setup-status" class="setup-progress" role="status" aria-live="polite"
+       hx-get="/setup/status?job={{.JobID}}" hx-trigger="every 750ms"
+       hx-target="this" hx-swap="outerHTML" hx-indicator="this">
+    <h2>Preparing your archive…</h2>
+    <p>{{.Stage}}</p>
+    <progress aria-label="Import in progress"></progress>
+    <p>Your archive will open automatically when processing finishes.</p>
+    <a class="text-link" href="/setup?job={{.JobID}}" hx-boost="false">Refresh progress</a>
+  </div>
+{{end}}

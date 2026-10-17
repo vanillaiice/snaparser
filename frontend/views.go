@@ -40,7 +40,7 @@ func label(value string) string {
 
 func archivePath(path string) bool {
 	switch path {
-	case "/", "/friends", "/snaps", "/calls", "/account":
+	case "/", "/friends", "/snaps", "/calls", "/account", "/setup":
 		return true
 	}
 
