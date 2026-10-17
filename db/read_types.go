@@ -58,9 +58,33 @@ type ChatPosition struct {
 
 // Snap retains nullable metadata and adds database identifiers.
 type Snap struct {
-	ID             int64
-	ConversationID int64
+	ID              int64
+	ConversationID  int64
+	ConversationKey string
 	parser.Snap
+}
+
+// Call retains the exported call fields and its incoming/outgoing direction.
+type Call struct {
+	ID        int64
+	Direction string
+	parser.Call
+}
+
+// CallOptions filters calls by direction and literal text across exported fields.
+type CallOptions struct {
+	Pagination
+	Direction string
+	Query     string
+}
+
+// AccountChange is one event from the exported account history.
+type AccountChange struct {
+	ID     int64
+	Kind   string
+	Date   string
+	Status string
+	Value  string
 }
 
 // Friend includes the imported friend category and database identifier.

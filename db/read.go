@@ -133,7 +133,8 @@ func (d *DB) GetChatPosition(ctx context.Context, id int64) (ChatPosition, error
 // descending timestamp and ID, as with ListChats.
 func (d *DB) ListSnaps(ctx context.Context, options MessageOptions) ([]Snap, error) {
 	query, args, err := messageQuery("snaps", `m.id, m.conversation_id, m.sender, m.media_type, m.created,
-        m.conversation_title, m.is_sender, m.created_microseconds`, options)
+        m.conversation_title, m.is_sender, m.created_microseconds,
+        (select conversation_key from conversations where id = m.conversation_id)`, options)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +143,7 @@ func (d *DB) ListSnaps(ctx context.Context, options MessageOptions) ([]Snap, err
 		var s Snap
 
 		err := row.Scan(&s.ID, &s.ConversationID, &s.From, &s.MediaType, &s.Created,
-			&s.ConversationTitle, &s.IsSender, &s.CreatedMicroseconds)
+			&s.ConversationTitle, &s.IsSender, &s.CreatedMicroseconds, &s.ConversationKey)
 
 		return s, err
 	})

@@ -6,12 +6,12 @@
   <meta name="color-scheme" content="light dark">
   <meta name="description" content="Browse and search your Snapchat chat history.">
   <meta name="htmx-config" content='{"allowEval":false,"allowScriptTags":false,"includeIndicatorStyles":false,"historyCacheSize":0,"responseHandling":[{"code":"204","swap":false},{"code":"[23]..","swap":true},{"code":"[45]..","swap":true,"error":true}]}'>
-  <title>Chats · Snaparser</title>
+  <title>Snaparser archive</title>
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/app.css">
   <script src="/assets/htmx-2.0.11.min.js" defer></script>
 </head>
-<body hx-history="false" hx-boost="true" hx-target="#workspace" hx-swap="outerHTML show:none" hx-indicator="#loading" hx-sync="#workspace:replace">
+<body hx-history="false" hx-boost="true" hx-target="#workspace" hx-swap="outerHTML show:none" hx-indicator="#navigation-loading" hx-sync="#workspace:replace">
   {{template "icons"}}
   <a class="skip-link" href="#messages-title" hx-boost="false">Skip to messages</a>
   <header class="topbar">
@@ -25,7 +25,7 @@
           <option value="light" {{if eq .Theme "light"}}selected{{end}}>Light</option>
           <option value="dark" {{if eq .Theme "dark"}}selected{{end}}>Dark</option>
         </select>
-        <input type="hidden" name="return_to" value="{{.URL .ConversationID .Offset .ConversationOffset}}">
+        <input type="hidden" name="return_to" value="{{.CurrentURL}}">
         <noscript><button class="plain-button" type="submit">Apply</button></noscript>
       </form>
     </div>
@@ -36,6 +36,17 @@
 
 {{define "workspace"}}
 <main id="workspace" tabindex="-1">
+  <nav class="archive-nav" aria-label="Archive sections">
+    <a href="/" {{if not .Section}}aria-current="page"{{end}}>Chats</a>
+    <a href="/friends" {{if eq .Section "friends"}}aria-current="page"{{end}}>Friends</a>
+    <a href="/snaps" {{if eq .Section "snaps"}}aria-current="page"{{end}}>Snap history</a>
+    <a href="/calls" {{if eq .Section "calls"}}aria-current="page"{{end}}>Calls</a>
+    <a href="/account" {{if eq .Section "account"}}aria-current="page"{{end}}>Account</a>
+    <span id="navigation-loading" class="htmx-indicator" role="status">Loading…</span>
+  </nav>
+  {{if .Section}}
+    {{template "details-workspace" .}}
+  {{else}}
   <form class="search-form" role="search" action="/" method="get" hx-get="/" hx-trigger="submit, input delay:350ms" hx-target="#archive" hx-select="#archive" hx-swap="outerHTML show:none" hx-push-url="true" hx-sync="#workspace:replace" hx-indicator="#loading">
     <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
     <label class="sr-only" for="query">Search messages or senders</label>
@@ -46,6 +57,7 @@
     <button class="search-button" type="submit">Search</button>
   </form>
   {{template "archive" .}}
+  {{end}}
 </main>
 {{end}}
 
@@ -80,7 +92,7 @@
   </div>
   <section class="message-pane" aria-labelledby="messages-title">
     <header class="messages-heading">
-      <div class="messages-title"><h1 id="messages-title" tabindex="-1">{{if .Selected}}{{.Selected.Key}}{{else}}All conversations{{end}}</h1>{{if .Query}}<p class="search-summary">Search: <strong>{{.Query}}</strong> <a class="text-link clear-search" href="{{.ClearSearchURL}}">Clear</a></p>{{else if .Selected}}<p>{{number .Selected.ChatCount}} messages</p>{{end}}</div>
+      <div class="messages-title"><h1 id="messages-title" tabindex="-1">{{if .Selected}}{{.Selected.Key}}{{else}}All conversations{{end}}</h1>{{if .Query}}<p class="search-summary">Search: <strong>{{.Query}}</strong> <a class="text-link clear-search" href="{{.ClearSearchURL}}">Clear</a></p>{{else if .Selected}}<p>{{number .Selected.ChatCount}} messages · <a class="text-link" href="/snaps?conversation={{.ConversationID}}">Snap history</a></p>{{end}}</div>
       <span class="sort-label">{{if .Query}}Best match{{else}}Oldest to newest{{end}} <span class="timezone">· UTC</span></span>
     </header>
     <div class="message-feed {{if .Query}}search-results{{end}} {{if not .Messages}}is-empty{{end}}" role="region" aria-label="Messages" tabindex="0">

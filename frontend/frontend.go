@@ -39,7 +39,13 @@ type Store interface {
 	GetConversation(context.Context, int64) (db.Conversation, error)
 	GetChatPosition(context.Context, int64) (db.ChatPosition, error)
 	ListChats(context.Context, db.MessageOptions) ([]db.Chat, error)
+	ListSnaps(context.Context, db.MessageOptions) ([]db.Snap, error)
+	ListFriends(context.Context, db.FriendOptions) ([]db.Friend, error)
+	ListCalls(context.Context, db.CallOptions) ([]db.Call, error)
+	ListAccountChanges(context.Context, db.Pagination) ([]db.AccountChange, error)
 	GetAccount(context.Context) (*parser.Account, error)
+	GetSnapProfile(context.Context) (*parser.SnapProfile, error)
+	GetUserProfile(context.Context) (*parser.UserProfile, error)
 	GetExportDirectory(context.Context) (string, error)
 }
 
@@ -53,6 +59,7 @@ func New(store Store) (http.Handler, error) {
 	templates, err := template.New("archive").Funcs(template.FuncMap{
 		"number": number,
 		"date":   date,
+		"label":  label,
 	}).ParseFS(files, "templates/*.html")
 	if err != nil {
 		return nil, fmt.Errorf("parse frontend templates: %w", err)
@@ -83,6 +90,10 @@ func New(store Store) (http.Handler, error) {
 
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assets))))
 	mux.HandleFunc("GET /{$}", h.archive)
+	mux.HandleFunc("GET /friends", h.details)
+	mux.HandleFunc("GET /snaps", h.details)
+	mux.HandleFunc("GET /calls", h.details)
+	mux.HandleFunc("GET /account", h.details)
 	mux.HandleFunc("POST /theme", h.setTheme)
 	mux.HandleFunc("GET /media/{filename}", h.serveMedia)
 
@@ -103,6 +114,17 @@ type handler struct {
 }
 
 type page struct {
+	Section            string
+	Title              string
+	Filter             string
+	Friends            []db.Friend
+	Snaps              []message
+	Calls              []db.Call
+	Changes            []db.AccountChange
+	Details            []detailGroup
+	Account            *parser.Account
+	Profile            *parser.UserProfile
+	MoreRecords        bool
 	Theme              string
 	Query              string
 	ConversationID     int64
@@ -206,10 +228,6 @@ func (p page) Start() int { return p.Offset + 1 }
 func (p page) End() int { return p.Offset + len(p.Messages) }
 
 func (h *handler) archive(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("Cache-Control", "no-store")
-	w.Header().Set("Vary", "HX-Request, HX-Target, HX-History-Restore-Request, Cookie")
-
 	p := page{Theme: requestTheme(r), Query: strings.TrimSpace(r.URL.Query().Get("q"))}
 
 	status := http.StatusOK
@@ -259,12 +277,20 @@ func (h *handler) archive(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	h.render(w, r, p, status)
+}
+
+func (h *handler) render(w http.ResponseWriter, r *http.Request, p page, status int) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("Vary", "HX-Request, HX-Target, HX-History-Restore-Request, Cookie")
+
 	name := "page"
 
 	if r.Header.Get("HX-Request") == "true" && r.Header.Get("HX-History-Restore-Request") != "true" {
 		name = "workspace"
 
-		if r.Header.Get("HX-Target") == "load-older" && p.Query == "" {
+		if r.Header.Get("HX-Target") == "load-older" && p.Query == "" && p.Section == "" {
 			name = "history"
 		}
 	}
@@ -327,7 +353,7 @@ func (h *handler) setTheme(w http.ResponseWriter, r *http.Request) {
 	// A native form submission returns to the same view without JavaScript.
 	target := "/"
 
-	if u, err := url.Parse(r.PostForm.Get("return_to")); err == nil && !u.IsAbs() && u.Host == "" && u.Path == "/" {
+	if u, err := url.Parse(r.PostForm.Get("return_to")); err == nil && !u.IsAbs() && u.Host == "" && archivePath(u.Path) {
 		target = u.RequestURI()
 	}
 

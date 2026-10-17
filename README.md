@@ -1,7 +1,7 @@
 # Snaparser
 
-Snaparser parses snapchat chat history json files to human friendly format.
-Snaparser has three main components, the parser, sqlite database, and htmx frontend, all in one go binary.
+Snaparser turns Snapchat exports into a searchable local archive.
+The parser, SQLite database, and HTMX frontend run in one Go binary.
 
 Create the database from an unzipped Snapchat export and open the embedded chat
 browser in one command:
@@ -22,7 +22,23 @@ backup only after all required JSON files parse successfully and additional JSON
 files validate. Missing directories, missing supported files, or invalid JSON
 abort the import without changing an existing archive.
 
-See [frontend/README.md](frontend/README.md) for server integration and the current UI scope.
+The browser includes:
+
+- **Chats:** full-text search, conversation browsing, older history, links from
+  search results to surrounding messages, and image/video/audio attachments.
+- **Friends:** searchable relationship lists, including blocked, deleted, pending,
+  ignored, hidden suggestions, and sent requests.
+- **Snap history:** searchable metadata, conversation filtering, and links to chat
+  conversations. Snap history does not contain attachment IDs.
+- **Calls:** incoming/outgoing filters, literal text search, dates, results,
+  duration, location, and network information.
+- **Account:** account/device details, login/device histories, public and app
+  profiles, engagement, content categories, and paged
+  account changes.
+
+All sections support ordinary links and forms as well as HTMX navigation, with
+System, Light, and Dark themes. See [frontend/README.md](frontend/README.md) for
+server integration and view behavior.
 
 # Architecture
 
@@ -135,6 +151,27 @@ snaparser serve --db archive.db
 - `--db PATH`: SQLite archive, default `snaparser.db`.
 - `--listen ADDRESS`: viewer address, default `127.0.0.1:8080` (`serve` only).
 - `--help`: show command-specific help.
+
+
+# Development
+
+```sh
+go test ./...
+go vet ./...
+go build -o bin/snaparser ./cmd/snaparser
+```
+
+Tests use synthetic exports and temporary databases; a private `data/` directory
+is not required. Database tests cover replacement of a complete backup, clearing
+omitted sections, rollback of source rows and full-text indexes, profile/friend
+round trips, timestamp normalization, and paged history queries.
+
+The supported files are `account.json`, `account_history.json`,
+`chat_history.json`, `friends.json`, `snap_history.json`, `snap_pro.json`,
+`talk_history.json`, and `user_profile.json`. Additional JSON files are validated
+but their contents are not imported. Empty placeholder types marked TODO in
+`parser/types.go` still need nonempty export examples before their schemas and
+storage can be implemented; their contents are not stored or displayed.
 
 # Author
 

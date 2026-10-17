@@ -1,0 +1,195 @@
+{{define "details-workspace"}}
+  {{if ne .Section "account"}}
+  <form class="search-form record-filters" role="search" action="/{{.Section}}" method="get"
+        hx-get="/{{.Section}}" hx-trigger="submit, input delay:350ms" hx-target="#records"
+        hx-select="#records" hx-swap="outerHTML show:none" hx-push-url="true"
+        hx-sync="#workspace:replace" hx-indicator="#loading">
+    <label class="sr-only" for="query">Search {{.Title}}</label>
+    <input id="query" name="q" type="search" value="{{.Query}}" maxlength="500"
+           placeholder="Search {{.Title}}" autocomplete="off" spellcheck="false" aria-controls="records">
+
+    {{if eq .Section "friends"}}
+    <label class="sr-only" for="record-filter">Friend category</label>
+    <select id="record-filter" name="filter">
+      <option value="">All categories</option>
+      <option value="friends" {{if eq .Filter "friends"}}selected{{end}}>Friends</option>
+      <option value="requests_sent" {{if eq .Filter "requests_sent"}}selected{{end}}>Requests sent</option>
+      <option value="blocked" {{if eq .Filter "blocked"}}selected{{end}}>Blocked</option>
+      <option value="deleted" {{if eq .Filter "deleted"}}selected{{end}}>Deleted</option>
+      <option value="hidden_suggestions" {{if eq .Filter "hidden_suggestions"}}selected{{end}}>Hidden suggestions</option>
+      <option value="ignored" {{if eq .Filter "ignored"}}selected{{end}}>Ignored</option>
+      <option value="pending" {{if eq .Filter "pending"}}selected{{end}}>Pending requests</option>
+    </select>
+    {{else if eq .Section "calls"}}
+    <label class="sr-only" for="record-filter">Call direction</label>
+    <select id="record-filter" name="filter">
+      <option value="">All directions</option>
+      <option value="incoming" {{if eq .Filter "incoming"}}selected{{end}}>Incoming</option>
+      <option value="outgoing" {{if eq .Filter "outgoing"}}selected{{end}}>Outgoing</option>
+    </select>
+    {{end}}
+
+    {{if .ConversationID}}<input type="hidden" name="conversation" value="{{.ConversationID}}">{{end}}
+    <span id="loading" class="htmx-indicator" role="status">Searching…</span>
+    <button class="search-button" type="submit">Search</button>
+  </form>
+  {{end}}
+
+  <section id="records" class="records-panel" aria-labelledby="messages-title">
+    <header class="messages-heading">
+      <div class="messages-title">
+        <h1 id="messages-title" tabindex="-1">{{.Title}}</h1>
+        {{if eq .Section "snaps"}}<p>Snap metadata from your export.{{if .Selected}} Conversation: {{.Selected.Key}} · <a class="text-link" href="/snaps">All snaps</a>{{end}}</p>{{end}}
+        {{if eq .Section "calls"}}<p>Incoming and outgoing calls, with exported dates and durations in seconds.</p>{{end}}
+        {{if eq .Section "account"}}<p>Account, device and profile information from your export.</p>{{end}}
+      </div>
+    </header>
+
+    <div class="records-scroll" tabindex="0" role="region" aria-label="{{.Title}} records">
+      {{if .Error}}
+        <div class="empty-state" role="alert">
+          <h2>{{.ErrorTitle}}</h2>
+          <p>{{.Error}}</p>
+          <a class="text-link" href="/{{.Section}}">Reset this view</a>
+        </div>
+      {{else if eq .Section "account"}}
+        {{template "account-details" .}}
+      {{else if .RecordCount}}
+        {{if eq .Section "friends"}}{{template "friends-table" .}}{{end}}
+        {{if eq .Section "snaps"}}{{template "snaps-table" .}}{{end}}
+        {{if eq .Section "calls"}}{{template "calls-table" .}}{{end}}
+      {{else}}
+        <div class="empty-state">
+          <h2>No {{if .Query}}matching {{end}}{{if eq .Section "friends"}}friends{{else if eq .Section "snaps"}}snaps{{else}}calls{{end}}</h2>
+          <p>{{if or .Query .Filter}}Try another search or filter.{{else if .Offset}}Return to the previous page.{{else}}There are no records in this part of the archive.{{end}}</p>
+        </div>
+      {{end}}
+    </div>
+
+    {{if not .Error}}{{template "records-pagination" .}}{{end}}
+  </section>
+{{end}}
+
+{{define "records-pagination"}}
+  <footer class="message-pagination">
+    <span role="status">{{if eq .Section "account"}}Account history: {{end}}{{if .RecordCount}}<strong>{{.Start}}–{{.RecordEnd}}</strong> records{{else}}0 records{{end}}</span>
+    <nav aria-label="{{.Title}} pages">
+      {{if .Offset}}<a class="page-button" href="{{.PreviousRecords}}">← Previous</a>{{else}}<button class="page-button" disabled>← Previous</button>{{end}}
+      {{if .MoreRecords}}<a class="page-button" href="{{.NextRecords}}">Next →</a>{{else}}<button class="page-button" disabled>Next →</button>{{end}}
+    </nav>
+  </footer>
+{{end}}
+
+{{define "friends-table"}}
+  <div class="table-wrap">
+    <table class="archive-table">
+      <caption class="sr-only">Friends and relationship categories</caption>
+      <thead><tr><th scope="col">Username</th><th scope="col">Display name</th><th scope="col">Category</th><th scope="col">Created</th><th scope="col">Modified</th><th scope="col">Source</th></tr></thead>
+      <tbody>
+        {{range .Friends}}
+        <tr><td>{{.Username}}</td><td>{{.DisplayName}}</td><td>{{label .Category}}</td><td>{{.CreationTimestamp}}</td><td>{{.LastModifiedTimestamp}}</td><td>{{.Source}}</td></tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+{{end}}
+
+{{define "snaps-table"}}
+  <div class="table-wrap">
+    <table class="archive-table">
+      <caption class="sr-only">Snap history</caption>
+      <thead><tr><th scope="col">Date (UTC)</th><th scope="col">From</th><th scope="col">Conversation</th><th scope="col">Media type</th><th scope="col">Direction</th></tr></thead>
+      <tbody>
+        {{range .Snaps}}
+        <tr>
+          <td><time {{if .DateTime}}datetime="{{.DateTime}}"{{end}}>{{.Day}} {{.Created}}</time></td>
+          <td>{{.From}}</td>
+          <td><a class="text-link" href="{{.ConversationURL}}">{{.ConversationName}}</a></td>
+          <td>{{.MediaType}}</td><td>{{if .Outgoing}}Outgoing{{else}}Incoming{{end}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+{{end}}
+
+{{define "calls-table"}}
+  <div class="table-wrap">
+    <table class="archive-table">
+      <caption class="sr-only">Call history</caption>
+      <thead><tr><th scope="col">Date</th><th scope="col">Direction</th><th scope="col">Type</th><th scope="col">Result</th><th scope="col">People</th><th scope="col">Seconds</th><th scope="col">City</th><th scope="col">Country</th><th scope="col">Network</th></tr></thead>
+      <tbody>
+        {{range .Calls}}
+        <tr><td>{{.DateTime}}</td><td>{{label .Direction}}</td><td>{{.Type}}</td><td>{{.Result}}</td><td>{{.PeopleInChat}}</td><td>{{.Length}}</td><td>{{.City}}</td><td>{{.Country}}</td><td>{{.Network}}</td></tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+{{end}}
+
+{{define "account-details"}}
+  {{if not .Details}}
+    <div class="empty-state"><h2>No account details</h2><p>Account and profile information has not been imported.</p></div>
+  {{end}}
+
+  <div class="detail-groups">
+    {{range .Details}}
+    <section class="detail-card">
+      <h2>{{.Title}}</h2>
+      <dl>{{range .Fields}}<div><dt>{{.Label}}</dt><dd>{{if .Value}}{{.Value}}{{else}}—{{end}}</dd></div>{{end}}</dl>
+    </section>
+    {{end}}
+  </div>
+
+  {{if .Account}}
+    {{if .Account.DeviceHistory}}
+    <section class="detail-section">
+      <h2>Device history</h2>
+      <div class="table-wrap">
+        <table class="archive-table">
+          <thead><tr><th scope="col">Make</th><th scope="col">Model</th><th scope="col">Start time</th><th scope="col">Type</th></tr></thead>
+          <tbody>{{range .Account.DeviceHistory}}<tr><td>{{.Make}}</td><td>{{.Model}}</td><td>{{.StartTime}}</td><td>{{.DeviceType}}</td></tr>{{end}}</tbody>
+        </table>
+      </div>
+    </section>
+    {{end}}
+
+    {{if .Account.LoginHistory}}
+    <section class="detail-section">
+      <h2>Login history</h2>
+      <div class="table-wrap">
+        <table class="archive-table">
+          <thead><tr><th scope="col">Date</th><th scope="col">IP</th><th scope="col">Country</th><th scope="col">Status</th><th scope="col">Device</th></tr></thead>
+          <tbody>{{range .Account.LoginHistory}}<tr><td>{{.Created}}</td><td>{{.IP}}</td><td>{{.Country}}</td><td>{{.Status}}</td><td>{{.Device}}</td></tr>{{end}}</tbody>
+        </table>
+      </div>
+    </section>
+    {{end}}
+  {{end}}
+
+  {{if .Profile}}
+    {{with .Profile}}
+    <div class="detail-groups">
+      {{if .Engagement}}<section class="detail-card"><h2>Engagement</h2><dl>{{range .Engagement}}<div><dt>{{.Event}}</dt><dd>{{.Occurrences}}</dd></div>{{end}}</dl></section>{{end}}
+      {{if .DiscoverChannelsViewed}}<section class="detail-card"><h2>Discover channels viewed</h2><ul>{{range .DiscoverChannelsViewed}}<li>{{.ChannelName}}</li>{{end}}</ul></section>{{end}}
+      {{if .AdsYouInteractedWith}}<section class="detail-card"><h2>Ads interacted with</h2><dl>{{range .AdsYouInteractedWith}}<div><dt>{{.AdvertiserName}}</dt><dd>{{.Date}}</dd></div>{{end}}</dl></section>{{end}}
+      {{if .BreakdownOfTimeSpentOnApp}}<section class="detail-card"><h2>Time spent on app</h2><ul>{{range .BreakdownOfTimeSpentOnApp}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
+      {{if .ContentCategories}}<section class="detail-card"><h2>Content categories</h2><ul>{{range .ContentCategories}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
+      {{if .Interactions.WebInteractions}}<section class="detail-card"><h2>Web interactions</h2><ul>{{range .Interactions.WebInteractions}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
+      {{if .Interactions.AppInteractions}}<section class="detail-card"><h2>App interactions</h2><ul>{{range .Interactions.AppInteractions}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
+    </div>
+    {{end}}
+  {{end}}
+
+  <section class="detail-section">
+    <h2>Account history</h2>
+    {{if .Changes}}
+    <div class="table-wrap">
+      <table class="archive-table">
+        <thead><tr><th scope="col">Event</th><th scope="col">Date</th><th scope="col">Value</th><th scope="col">Status</th></tr></thead>
+        <tbody>{{range .Changes}}<tr><td>{{label .Kind}}</td><td>{{.Date}}</td><td>{{.Value}}</td><td>{{.Status}}</td></tr>{{end}}</tbody>
+      </table>
+    </div>
+    {{else}}<p>No account history on this page.</p>{{end}}
+  </section>
+{{end}}

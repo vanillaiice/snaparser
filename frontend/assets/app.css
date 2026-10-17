@@ -937,3 +937,178 @@ button:disabled {
     transition: none !important;
   }
 }
+
+.archive-nav {
+  display: flex;
+  flex: none;
+  gap: 4px;
+  padding: 8px 16px 0;
+  overflow-x: auto;
+}
+
+.archive-nav a {
+  flex: none;
+  padding: 9px 14px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.archive-nav a:hover {
+  background: var(--blue);
+}
+
+.archive-nav a[aria-current=page] {
+  background: var(--yellow);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.record-filters select {
+  max-width: 190px;
+  min-height: 36px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--background);
+}
+
+.records-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  margin: 12px 16px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.records-scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 20px 24px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.archive-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.archive-table th,
+.archive-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  min-width: 110px;
+  max-width: 320px;
+}
+
+.archive-table th {
+  background: var(--blue);
+  font-weight: 600;
+}
+
+.detail-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  align-items: start;
+  gap: 18px;
+}
+
+.detail-card {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+
+.detail-card h2,
+.detail-section h2 {
+  margin: 0 0 14px;
+  font-size: 15px;
+}
+
+.detail-card dl {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.detail-card dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.detail-card dt {
+  color: var(--muted);
+}
+
+.detail-card dd {
+  margin: 0;
+}
+
+.detail-card ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.detail-section {
+  margin: 24px 0;
+}
+
+.detail-section p {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 700px) {
+  .archive-nav {
+    padding: 8px 8px 0;
+    gap: 0;
+  }
+
+  .archive-nav a {
+    padding: 9px 11px;
+    font-size: 12px;
+  }
+
+  .record-filters {
+    flex-wrap: wrap;
+  }
+
+  .record-filters input[type=search] {
+    flex: 1 1 100%;
+  }
+
+  .record-filters select {
+    flex: 1;
+    max-width: none;
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  .records-panel {
+    margin: 10px 8px 8px;
+  }
+
+  .records-scroll {
+    padding: 14px 12px;
+  }
+}
