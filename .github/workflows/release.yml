@@ -1,0 +1,32 @@
+name: Prepare release
+
+on:
+  push:
+    tags: ["v[0-9]*"]
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version: stable
+          cache: true
+      - name: Build and verify release archives
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: RELEASE_VERSION="${RELEASE_TAG#v}" make release
+      - name: Create a draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" "dist/$RELEASE_TAG/"* \
+            --verify-tag --draft --title "Snaparser $RELEASE_TAG" \
+            --notes-file CHANGELOG.md

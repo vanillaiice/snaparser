@@ -27,9 +27,11 @@ The browser includes:
 - **Chats:** full-text search, conversation browsing, older history, links from
   search results to surrounding messages, and image/video/audio attachments.
 - **Friends:** searchable relationship lists, including blocked, deleted, pending,
-  ignored, hidden suggestions, and sent requests.
-- **Snap history:** searchable metadata, conversation filtering, and links to chat
-  conversations. Snap history does not contain attachment IDs.
+  ignored, hidden suggestions, and sent requests. Click a name to open its chat;
+  friends without an imported conversation are marked “No chat history.”
+- **Snap history:** the same conversation sidebar, incoming/outgoing bubbles,
+  search, surrounding-record links, and older-history navigation as chats.
+  Snaps show exported metadata; snap history does not contain attachment IDs.
 - **Calls:** incoming/outgoing filters, literal text search, dates, results,
   duration, location, and network information.
 - **Account:** account/device details, login/device histories, public and app
@@ -144,21 +146,69 @@ snaparser import --data /path/to/snapchat-export --db archive.db
 snaparser serve --db archive.db
 ```
 
+# Configuration
+
+Configuration is optional. Copy [snaparser.example.toml](snaparser.example.toml)
+to `snaparser.toml` in your working directory and edit it, or select another file:
+
+```sh
+snaparser --config /path/to/archive.toml serve
+# --config also works after the subcommand:
+snaparser import --config /path/to/archive.toml --data /path/to/export
+```
+
+Values take precedence in this order: **explicit CLI flags → TOML → built-in
+defaults**. A missing default `snaparser.toml` is fine. An explicitly selected
+missing file, invalid TOML, unsupported keys, and invalid setting types produce
+an error. Paths in both TOML and flags are relative to the working directory.
+
+```toml
+data = ""
+db = "snaparser.db"
+
+[server]
+listen = "127.0.0.1:8080"
+read_header_timeout = "5s"
+read_timeout = "15s"
+write_timeout = "30s"
+idle_timeout = "60s"
+shutdown_timeout = "5s"
+```
+
+These are the defaults. The server binds to loopback. An empty `data` value
+reuses the database when serving; `import` requires a nonempty export path.
+**Setting `data` in TOML imports that export each time `serve` runs, replacing the
+selected archive.** To reuse the database while keeping that setting in the file:
+
+```sh
+snaparser serve --config archive.toml --data=""
+```
+
+Duration settings accept Go duration strings such as `500ms`, `30s`, and `2m`.
+HTTP timeouts accept `0s` to disable them; the shutdown timeout must be positive.
+TOML support uses [urfave/cli's official value-source integration](https://cli.urfave.org/v3/examples/flags/value-sources/).
+
 # Flags
 
-- `--data PATH`: export root containing `json/` and `chat_media/`; required for
-  `import`, optional for `serve`.
+- `--config PATH`, `-c PATH`: TOML file, default `snaparser.toml` (global).
+- `--data PATH`: export root containing `json/` and `chat_media/`; needed for
+  `import` unless set in TOML, optional for `serve`.
 - `--db PATH`: SQLite archive, default `snaparser.db`.
 - `--listen ADDRESS`: viewer address, default `127.0.0.1:8080` (`serve` only).
+- `--read-header-timeout`, `--read-timeout`, `--write-timeout`,
+  `--idle-timeout`, `--shutdown-timeout`: override the matching `[server]`
+  duration setting (`serve` only).
+- `--version`: print the application version (`1.0.0`).
 - `--help`: show command-specific help.
 
 
 # Development
 
 ```sh
-go test ./...
-go vet ./...
-go build -o bin/snaparser ./cmd/snaparser
+make check
+make build
+# Equivalent commands: go test ./..., go vet ./..., go mod verify
+# The native binary is written to bin/snaparser (snaparser.exe on Windows).
 ```
 
 Tests use synthetic exports and temporary databases; a private `data/` directory
@@ -172,6 +222,17 @@ The supported files are `account.json`, `account_history.json`,
 but their contents are not imported. Empty placeholder types marked TODO in
 `parser/types.go` still need nonempty export examples before their schemas and
 storage can be implemented; their contents are not stored or displayed.
+
+# Release preparation
+
+`make release` runs the checks and creates archives for Linux, macOS, and Windows
+on amd64 and arm64 under `dist/v1.0.0/`, including documentation, the example TOML,
+licenses, and `SHA256SUMS`. Building requires Go 1.26 or newer, Make, and Python
+3.9 or newer for packaging. Normal builds need only Go.
+
+See [RELEASING.md](RELEASING.md) for the release procedure and
+[CHANGELOG.md](CHANGELOG.md) for the 1.0.0 release notes. The tag workflow creates
+a **draft** GitHub release for review; building locally does not publish anything.
 
 # Author
 

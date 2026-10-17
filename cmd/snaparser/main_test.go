@@ -56,7 +56,7 @@ func TestImportCommandCreatesSearchableArchive(t *testing.T) {
 
 	app.Writer = &output
 
-	if err := app.Run([]string{"snaparser", "import", "--data", root, "--db", path}); err != nil {
+	if err := app.Run(context.Background(), []string{"snaparser", "import", "--data", root, "--db", path}); err != nil {
 		t.Fatal(err)
 	}
 
@@ -214,7 +214,7 @@ func TestServeDataImportsBeforeStartingServer(t *testing.T) {
 	app.Writer = &output
 
 	// An invalid address lets the action finish without binding a test port.
-	err := app.Run([]string{"snaparser", "serve", "--data", directory, "--db", path, "--listen", "invalid-address"})
+	err := app.Run(context.Background(), []string{"snaparser", "serve", "--data", directory, "--db", path, "--listen", "invalid-address"})
 	if err == nil || !strings.Contains(err.Error(), "missing port") {
 		t.Fatalf("expected the action to reach server startup: %v", err)
 	}

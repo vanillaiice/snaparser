@@ -23,7 +23,10 @@ root is stored in the same transaction as the parsed data. The default database 
 `snaparser.db`; `--db` selects another path. Import without starting the viewer
 with `go run ./cmd/snaparser import --data ./data --db snaparser.db`.
 
-`--listen` changes the default `127.0.0.1:8080` address. Without `--data`, the
+`--listen` changes the default `127.0.0.1:8080` address. The CLI also loads
+optional `snaparser.toml` configuration, or a file selected by `--config`.
+Explicit flags override TOML. See the root README and `snaparser.example.toml`
+for paths and server timeout settings. Without `--data`, the
 command requires an existing database file. Opening it applies the existing
 database package's migrations. Keep the source export at its imported location;
 viewer startup aborts if its recorded media directory cannot be read. Archives
@@ -111,20 +114,35 @@ The navigation inside `#workspace` provides Chats (`/`), Friends (`/friends`),
 Snap history (`/snaps`), Calls (`/calls`), and Account (`/account`). All routes
 return complete documents for native navigation and history restoration, or
 workspace fragments for HTMX. They share themes, cache headers, and error states.
-The record views use scrollable tables on small screens and fetch at most 41 rows
-to display 40 records and detect a next page. Search/filter changes reset the
+Friends and Calls use scrollable tables on small screens and fetch at most 41
+rows to display 40 records and detect a next page. Snap history uses the chat
+layout and history-loading behavior described above. Search/filter changes reset the
 record offset; pagination preserves the active search and filter.
 
 Friends supports literal word-prefix search over usernames and display names,
 and a category selector for friends, sent requests, blocked, deleted, hidden
 suggestions, ignored, and pending requests. Use `q`, `filter`, and `offset` in
 URLs. Search updates only `#records`, preserving the search input and focus.
+Usernames and display names link to the matching chat conversation using the
+exact exported username, across all relationship categories. These links clear
+the friends search, category, and page. Friends without an imported conversation
+show “No chat history” instead of a link.
 
-Snap history shows sender, conversation, media type, direction, and UTC time.
-Search matches the sender and conversation title. `conversation` restricts the
-view to one conversation; chat headers link to that view, and snap rows link
-back to the unfiltered chat conversation. These are metadata records; the export's
-snap history has no media IDs for resolving attachments.
+Snap history uses the same conversation sidebar, mobile selector, date dividers,
+incoming/outgoing bubbles, and independent message scrolling as Chats. Its sidebar
+includes conversations containing snaps, ordered by their latest snap activity,
+with snap counts. It opens on the newest window, rendered oldest to newest;
+scrolling up or selecting Load older snaps prepends earlier history. Native
+navigation provides newer/older pages and Latest snaps.
+
+Snap search matches the sender and conversation title, with relevance ordering
+and pagination. Search results link to surrounding snaps, clearing the search
+and highlighting the selected snap. Search, conversation selection, context
+links, and history navigation stay under `/snaps`. The `conversation`, `offset`,
+`conversations_offset`, and `message` parameters work as in Chats. Headers link
+between the same conversation's Chats and Snap history views. Bubbles display
+sender, direction, media type, and UTC time. These are metadata records; the
+export's snap history has no media IDs for resolving attachments.
 
 Calls supports `filter=incoming` or `filter=outgoing`, with a literal substring
 search across the exported date, type, result, city, country, and network. SQL
@@ -135,7 +153,12 @@ participant names.
 
 Account shows all currently stored account/device/profile fields, device and
 login histories, engagement, viewed channels, advertising interactions, content
-categories, time spent, and web/app interactions. Account changes are paged in
+categories, time spent, and web/app interactions. Account overview cards share a
+two-column grid (one column on phones); history tables use full-width sections
+with fixed column layouts and sticky headers. Profile collections are collapsed
+by default with entry counts. Opening a collection reveals its complete contents
+in a bounded, keyboard-scrollable area, with multi-column lists on wider screens.
+Account history pagination sits inside its own section. Account changes are paged in
 import order, with the event type, date, value, and status. Profile URLs and
 image references appear as text; viewing the account page does not fetch remote
 profile resources. Sections represented by parser TODO placeholders remain

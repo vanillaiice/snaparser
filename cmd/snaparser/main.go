@@ -11,46 +11,80 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/vanillaiice/snaparser/db"
 	"github.com/vanillaiice/snaparser/frontend"
 	"github.com/vanillaiice/snaparser/parser"
 )
 
+const version = "1.0.0"
+
 func main() {
-	if err := newApp().Run(os.Args); err != nil {
+	if err := newApp().Run(context.Background(), os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func newApp() *cli.App {
-	return &cli.App{
+func newApp() *cli.Command {
+	var configPath string
+
+	source := configSources(&configPath)
+
+	return &cli.Command{
 		Name:    "snaparser",
 		Suggest: true,
-		Version: "v0.1.4",
-		Authors: []*cli.Author{{Name: "vanillaiice", Email: "vanillaiice1@proton.me"}},
-		Usage:   "parse snapchat chat history to human friendly format",
-		Commands: []*cli.Command{{
-			Name:  "import",
-			Usage: "create or replace an archive database from an unzipped Snapchat export",
-			Flags: []cli.Flag{
-				&cli.StringFlag{Name: "data", Required: true, Usage: "unchanged Snapchat export root containing json/ and chat_media/"},
-				&cli.StringFlag{Name: "db", Value: "snaparser.db", Usage: "archive database to create or replace"},
+		Version: version,
+		Authors: []any{"vanillaiice <vanillaiice1@proton.me>"},
+		Usage:   "browse and search a local Snapchat export",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name: "config", Aliases: []string{"c"}, Value: defaultConfigFile,
+				Destination: &configPath, Usage: "TOML configuration file (optional at the default path)",
 			},
-			Action: importCommand,
-		}, {
-			Name:  "serve",
-			Usage: "browse an imported archive in the embedded web frontend",
-			Flags: []cli.Flag{
-				&cli.StringFlag{Name: "db", Value: "snaparser.db", Usage: "path to an existing archive database"},
-				&cli.StringFlag{Name: "data", Usage: "import this unchanged Snapchat export root before serving (replaces the selected archive)"},
-				&cli.StringFlag{Name: "listen", Value: "127.0.0.1:8080", Usage: "HTTP listen address"},
+		},
+		Before: func(ctx context.Context, c *cli.Command) (context.Context, error) {
+			return ctx, validateConfig(configPath, c.IsSet("config"))
+		},
+		Commands: []*cli.Command{
+			{
+				Name:  "import",
+				Usage: "create or replace an archive database from an unzipped Snapchat export",
+				Flags: []cli.Flag{
+					&cli.StringFlag{Name: "data", Sources: source("data"), Usage: "unchanged Snapchat export root containing json/ and chat_media/"},
+					databaseFlag(source("db")),
+				},
+				Action: importCommand,
 			},
-			Action: serve,
-		}},
+			{
+				Name:  "serve",
+				Usage: "browse an imported archive in the embedded web frontend",
+				Flags: []cli.Flag{
+					databaseFlag(source("db")),
+					&cli.StringFlag{Name: "data", Sources: source("data"), Usage: "import this export before serving (replaces the selected archive)"},
+					&cli.StringFlag{
+						Name: "listen", Value: "127.0.0.1:8080", Sources: source("server.listen"),
+						Usage: "HTTP listen address",
+						Validator: func(address string) error {
+							if strings.TrimSpace(address) == "" {
+								return errors.New("listen address must not be empty")
+							}
+
+							return nil
+						},
+					},
+					timeoutFlag("read-header-timeout", 5*time.Second, source),
+					timeoutFlag("read-timeout", 15*time.Second, source),
+					timeoutFlag("write-timeout", 30*time.Second, source),
+					timeoutFlag("idle-timeout", 60*time.Second, source),
+					timeoutFlag("shutdown-timeout", 5*time.Second, source),
+				},
+				Action: serve,
+			},
+		},
 	}
 }
 
@@ -75,20 +109,24 @@ func importArchive(ctx context.Context, directory, path string) (int, error) {
 	return len(backup.Filenames), nil
 }
 
-func importCommand(c *cli.Context) error {
-	count, err := importArchive(c.Context, c.String("data"), c.String("db"))
+func importCommand(ctx context.Context, c *cli.Command) error {
+	if strings.TrimSpace(c.String("data")) == "" {
+		return errors.New("import requires --data or a nonempty data value in the TOML configuration")
+	}
+
+	count, err := importArchive(ctx, c.String("data"), c.String("db"))
 	if err != nil {
 		return err
 	}
 
-	_, err = fmt.Fprintf(c.App.Writer, "Imported %d JSON files into %s\n", count, c.String("db"))
+	_, err = fmt.Fprintf(c.Root().Writer, "Imported %d JSON files into %s\n", count, c.String("db"))
 
 	return err
 }
 
-func serve(c *cli.Context) error {
+func serve(ctx context.Context, c *cli.Command) error {
 	if c.String("data") != "" {
-		if err := importCommand(c); err != nil {
+		if err := importCommand(ctx, c); err != nil {
 			return err
 		}
 	}
@@ -116,16 +154,16 @@ func serve(c *cli.Context) error {
 		return err
 	}
 
-	ctx, stop := signal.NotifyContext(c.Context, os.Interrupt, syscall.SIGTERM)
+	ctx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
 
 	defer stop()
 
 	server := &http.Server{
 		Addr: c.String("listen"), Handler: viewer,
-		ReadHeaderTimeout: 5 * time.Second,
-		ReadTimeout:       15 * time.Second,
-		WriteTimeout:      30 * time.Second,
-		IdleTimeout:       60 * time.Second,
+		ReadHeaderTimeout: c.Duration("read-header-timeout"),
+		ReadTimeout:       c.Duration("read-timeout"),
+		WriteTimeout:      c.Duration("write-timeout"),
+		IdleTimeout:       c.Duration("idle-timeout"),
 	}
 
 	done := make(chan struct{})
@@ -137,7 +175,7 @@ func serve(c *cli.Context) error {
 	go func() {
 		select {
 		case <-ctx.Done():
-			shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			shutdownCtx, cancel := context.WithTimeout(context.Background(), c.Duration("shutdown-timeout"))
 
 			defer cancel()
 

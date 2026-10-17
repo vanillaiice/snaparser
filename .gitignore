@@ -27,3 +27,7 @@ data
 *.db
 *.db-wal
 *.db-shm
+
+# Local configuration and release artifacts
+snaparser.toml
+dist/

@@ -1,33 +1,37 @@
-# Determine the operating system
-ifeq ($(OS), Windows_NT)
-	OS_TARGET = Windows
-else
-	OS_TARGET := $(shell uname -s)
-endif
+GO ?= go
+PYTHON ?= python3
 
-# Compile depending on OS
-os: $(OS_TARGET)
+.PHONY: build test vet check release all os Windows Linux Darwin
 
 build:
-	go build -ldflags="-s -w" cmd/snaparser/main.go
+	$(GO) build -trimpath -ldflags="-s -w" -o bin/ ./cmd/snaparser
 
 test:
-	go test ./...
+	$(GO) test ./...
 
-# Compile for windows
+vet:
+	$(GO) vet ./...
+
+check: test vet
+	$(GO) mod verify
+
+# Package all six supported OS/architecture pairs with documentation and checksums.
+release: check
+	$(PYTHON) scripts/release.py
+
+# Preserve the existing platform build targets (amd64).
 Windows:
 	mkdir -p bin/windows
-	GOOS=windows go build -ldflags="-s -w" -o bin/windows/snaparser.exe cmd/snaparser/main.go
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 $(GO) build -trimpath -ldflags="-s -w" -o bin/windows/snaparser.exe ./cmd/snaparser
 
-# Compile for linux
 Linux:
 	mkdir -p bin/linux
-	GOOS=linux go build -ldflags="-s -w" -o bin/linux/snaparser-linux cmd/snaparser/main.go
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -trimpath -ldflags="-s -w" -o bin/linux/snaparser-linux ./cmd/snaparser
 
-# Compile for darwin
 Darwin:
 	mkdir -p bin/darwin
-	GOOS=darwin go build -ldflags="-s -w" -o bin/darwin/snaparser-darwin cmd/snaparser/main.go
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GO) build -trimpath -ldflags="-s -w" -o bin/darwin/snaparser-darwin ./cmd/snaparser
 
-# Test and compile for all OS
-all: test Windows Linux Darwin
+os: build
+
+all: check Windows Linux Darwin
