@@ -135,7 +135,7 @@ func TestSetupStartsWithoutCreatingDatabase(t *testing.T) {
 
 	setup := get(a, "/setup")
 
-	for _, want := range []string{"Open your Snapchat export", `name="directory"`, "Browse folders", `action="/archive/import"`} {
+	for _, want := range []string{"Open your Snapchat export", `name="directory"`, "Browse folders", `action="/archive/import"`, `class="folder-browser"`, `name="browse"`, "Use this folder"} {
 		if !strings.Contains(setup.Body.String(), want) {
 			t.Errorf("setup missing %q", want)
 		}
@@ -221,7 +221,7 @@ func TestSelectionImportsOpensAndPersistsArchive(t *testing.T) {
 
 	setup := get(a, "/setup").Body.String()
 
-	if !strings.Contains(setup, "Rebuild archive") || !strings.Contains(setup, root) || !strings.Contains(setup, "Import selected folder") {
+	if !strings.Contains(setup, "Rebuild archive") || !strings.Contains(setup, root) || !strings.Contains(setup, "Import selected folder") || !strings.Contains(setup, folderURL(filepath.Join(root, "json"))) {
 		t.Fatal("archive management must expose the saved source and both actions")
 	}
 
@@ -238,6 +238,38 @@ func TestSelectionImportsOpensAndPersistsArchive(t *testing.T) {
 
 	if response := get(reopened, "/"); response.Code != 200 || !strings.Contains(response.Body.String(), "First selected archive") {
 		t.Fatal("a browser import must survive restarting without data flags")
+	}
+}
+
+func TestReturningFromSetupRestoresAppHeader(t *testing.T) {
+	a := managedArchive(t)
+
+	selectExport(t, a, managedExport(t, "archive.owner", "Archive navigation"))
+
+	setup := get(a, "/setup").Body.String()
+
+	links := regexp.MustCompile(`<a\b[^>]*href="/"[^>]*>`).FindAllString(setup, -1)
+
+	if len(links) != 2 {
+		t.Fatal("setup should offer the logo and back link to return to the app")
+	}
+
+	for _, link := range links {
+		if !strings.Contains(link, `hx-boost="false"`) {
+			t.Fatalf("returning from setup must reload the header outside #workspace: %s", link)
+		}
+	}
+
+	for range 2 {
+		body := get(a, "/").Body.String()
+
+		if !strings.Contains(body, `href="/setup" hx-boost="false">Archive</a>`) || !strings.Contains(body, "@archive.owner") {
+			t.Fatal("returning to the app must restore archive controls and the account name")
+		}
+
+		if response := get(a, "/setup"); response.Code != http.StatusOK {
+			t.Fatal("archive management must remain available after returning to the app")
+		}
 	}
 }
 

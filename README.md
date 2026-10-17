@@ -10,9 +10,10 @@ go run ./cmd/snaparser serve
 # http://127.0.0.1:8080
 ```
 
-If there is no existing archive, the browser opens setup. Enter the unzipped
-Snapchat export path or use **Browse folders**, then import it. Processing runs
-in the background, and the archive opens automatically when it finishes. The
+If there is no existing archive, the browser opens setup with an in-page folder browser.
+Browse to the unzipped Snapchat export and click **Use this folder**, or enter
+its path directly. Processing runs in the background, and the archive opens
+automatically when it finishes. The
 folder browser reads folders on the machine running Snaparser.
 
 The **Archive** button lets you select another export or **Rebuild archive**

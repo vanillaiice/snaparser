@@ -60,8 +60,6 @@ type setupPage struct {
 	Stage            string
 	JobID            uint64
 	Error            string
-	BrowseURL        string
-	Browsing         bool
 	BrowsePath       string
 	ParentURL        string
 	Folders          []folder
@@ -274,10 +272,12 @@ func (a *Archive) setup(w http.ResponseWriter, r *http.Request) {
 		browse, _ = os.Getwd()
 	}
 
-	p.BrowseURL = folderURL(browse)
-
 	if requested, ok := r.URL.Query()["browse"]; ok && len(requested) > 0 && !p.Processing {
-		p.browse(first(requested[0], browse))
+		browse = first(requested[0], browse)
+	}
+
+	if !p.Processing {
+		p.browse(browse)
 	}
 
 	a.shell.render(w, r, page{Section: "setup", Theme: requestTheme(r), Setup: &p}, http.StatusOK)
@@ -288,8 +288,6 @@ func folderURL(path string) string {
 }
 
 func (p *setupPage) browse(path string) {
-	p.Browsing = true
-
 	path, err := filepath.Abs(path)
 	if err != nil {
 		p.BrowseError = "Unable to resolve this folder. Enter its full path."

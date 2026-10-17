@@ -16,10 +16,10 @@
   {{template "icons"}}
   <a class="skip-link" href="#messages-title" hx-boost="false">Skip to messages</a>
   <header class="topbar">
-    <a class="brand" href="/"><img class="brand-logo" src="/assets/favicon.svg" width="28" height="28" alt=""><span class="brand-name">snaparser webui</span></a>
+    <a class="brand" href="/" hx-boost="false"><img class="brand-logo" src="/assets/favicon.svg" width="28" height="28" alt=""><span class="brand-name">snaparser webui</span></a>
     <div class="topbar-controls">
-      {{if and .CanManage (not .Setup)}}<a class="plain-button" href="/setup" hx-boost="false">Archive</a>{{end}}
       {{if .AccountUsername}}<span class="account" title="{{.AccountName}}">@{{.AccountUsername}}</span>{{end}}
+      {{if and .CanManage (not .Setup)}}<a class="plain-button" href="/setup" hx-boost="false">Archive</a>{{end}}
       <form class="theme-form" action="/theme" method="post" hx-post="/theme" hx-trigger="change, submit" hx-swap="none" hx-sync="this:replace" hx-indicator="this">
         <label class="sr-only" for="theme">Theme</label>
         <select id="theme" name="theme" aria-label="Theme">

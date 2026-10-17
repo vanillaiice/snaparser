@@ -37,6 +37,8 @@
 
 ### Fixed
 
+- Returning from archive setup through the logo restores the full app header,
+  including its Archive button. The in-page folder browser is visible immediately in setup.
 - Millisecond timestamps mislabeled as microseconds, including existing archives.
 - In-memory databases losing their migrated schema.
 - Regression coverage for archive replacement, rollback of data and search

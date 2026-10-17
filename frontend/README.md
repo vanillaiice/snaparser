@@ -47,8 +47,9 @@ mux.Handle("/", archive)
 ```
 
 `OpenArchive` owns the database connection and background import jobs. It adds a
-setup screen with a path field and directory browser, plus an **Archive** button
-for switching exports and rebuilding from the currently saved source. The folder
+setup screen with a path field and an immediately visible directory browser,
+plus an **Archive** button for switching exports and rebuilding from the currently
+saved source. The folder
 browser lists directories on the machine running the server; files are not
 uploaded from the browser. CLI/config selections continue to work.
 

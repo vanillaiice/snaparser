@@ -21,13 +21,12 @@
                  placeholder="/path/to/snapchat-export" aria-describedby="folder-help" autocomplete="off" spellcheck="false">
           <div class="setup-actions">
             <button class="search-button" type="submit">{{if .HasArchive}}Import selected folder{{else}}Import and open archive{{end}}</button>
-            <a class="plain-button" href="{{.BrowseURL}}" hx-boost="false">Browse folders</a>
+            <a class="plain-button" href="#folder-browser-title" hx-boost="false">Browse folders ↓</a>
           </div>
         </form>
 
-        {{if .Browsing}}
         <section class="folder-browser" aria-labelledby="folder-browser-title">
-          <h2 id="folder-browser-title">Choose a folder</h2>
+          <h2 id="folder-browser-title" tabindex="-1">Choose a folder</h2>
           <form class="folder-location" action="/setup" method="get" hx-boost="false">
             <label class="sr-only" for="browse-path">Browse location</label>
             <input id="browse-path" name="browse" type="text" value="{{.BrowsePath}}" required autocomplete="off" spellcheck="false">
@@ -48,7 +47,6 @@
             </form>
           {{end}}
         </section>
-        {{end}}
 
         {{if .CanRebuild}}
         <section class="setup-rebuild">
