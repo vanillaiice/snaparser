@@ -1,0 +1,246 @@
+{
+  "Outgoing Calls": [
+    {
+      "Date & Time": "2026-04-01 09:00:00 UTC",
+      "Type": "VIDEO",
+      "People in Chat": 6,
+      "Result": "COMPLETED",
+      "City": "Cairo",
+      "Country": "Egypt",
+      "Length (sec)": 42,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 09:12:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Luxor",
+      "Country": "Egypt",
+      "Length (sec)": 73,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 09:24:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Aswan",
+      "Country": "Egypt",
+      "Length (sec)": 104,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 09:36:00 UTC",
+      "Type": "VIDEO",
+      "People in Chat": 6,
+      "Result": "MISSED",
+      "City": "Cairo",
+      "Country": "Egypt",
+      "Length (sec)": 0,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 10:00:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Luxor",
+      "Country": "Egypt",
+      "Length (sec)": 166,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 10:12:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Aswan",
+      "Country": "Egypt",
+      "Length (sec)": 197,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 10:24:00 UTC",
+      "Type": "VIDEO",
+      "People in Chat": 6,
+      "Result": "COMPLETED",
+      "City": "Cairo",
+      "Country": "Egypt",
+      "Length (sec)": 228,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 10:36:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Luxor",
+      "Country": "Egypt",
+      "Length (sec)": 259,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 11:00:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Aswan",
+      "Country": "Egypt",
+      "Length (sec)": 290,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 11:12:00 UTC",
+      "Type": "VIDEO",
+      "People in Chat": 6,
+      "Result": "COMPLETED",
+      "City": "Cairo",
+      "Country": "Egypt",
+      "Length (sec)": 321,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 11:24:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Luxor",
+      "Country": "Egypt",
+      "Length (sec)": 352,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 11:36:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Aswan",
+      "Country": "Egypt",
+      "Length (sec)": 383,
+      "Network": "MOBILE"
+    }
+  ],
+  "Incoming Calls": [
+    {
+      "Date & Time": "2026-04-01 09:04:00 UTC",
+      "Type": "VIDEO",
+      "People in Chat": 6,
+      "Result": "COMPLETED",
+      "City": "Cairo",
+      "Country": "Egypt",
+      "Length (sec)": 42,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 09:16:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Luxor",
+      "Country": "Egypt",
+      "Length (sec)": 73,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 09:28:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Aswan",
+      "Country": "Egypt",
+      "Length (sec)": 104,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 09:40:00 UTC",
+      "Type": "VIDEO",
+      "People in Chat": 6,
+      "Result": "MISSED",
+      "City": "Cairo",
+      "Country": "Egypt",
+      "Length (sec)": 0,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 10:04:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Luxor",
+      "Country": "Egypt",
+      "Length (sec)": 166,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 10:16:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Aswan",
+      "Country": "Egypt",
+      "Length (sec)": 197,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 10:28:00 UTC",
+      "Type": "VIDEO",
+      "People in Chat": 6,
+      "Result": "COMPLETED",
+      "City": "Cairo",
+      "Country": "Egypt",
+      "Length (sec)": 228,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 10:40:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Luxor",
+      "Country": "Egypt",
+      "Length (sec)": 259,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 11:04:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Aswan",
+      "Country": "Egypt",
+      "Length (sec)": 290,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 11:16:00 UTC",
+      "Type": "VIDEO",
+      "People in Chat": 6,
+      "Result": "COMPLETED",
+      "City": "Cairo",
+      "Country": "Egypt",
+      "Length (sec)": 321,
+      "Network": "MOBILE"
+    },
+    {
+      "Date & Time": "2026-04-01 11:28:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Luxor",
+      "Country": "Egypt",
+      "Length (sec)": 352,
+      "Network": "WIFI"
+    },
+    {
+      "Date & Time": "2026-04-01 11:40:00 UTC",
+      "Type": "AUDIO",
+      "People in Chat": 2,
+      "Result": "COMPLETED",
+      "City": "Aswan",
+      "Country": "Egypt",
+      "Length (sec)": 383,
+      "Network": "MOBILE"
+    }
+  ]
+}

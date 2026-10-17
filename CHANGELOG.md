@@ -26,6 +26,8 @@
 - Recovery through folder reselection when a saved export has moved.
 - Release archives for Linux, macOS, and Windows on amd64 and arm64, with an
   example configuration, documentation, licenses, and SHA-256 checksums.
+- A fictional JoJo-themed demo export with attachments and README screenshots
+  covering chats, friends, snap history, calls, and account details.
 
 ### Changed
 
@@ -34,6 +36,8 @@
 - Imports represent one complete backup. A new import replaces previous data;
   omitted sections of programmatic partial imports are cleared.
 - Attachments remain in the original export instead of being copied into SQLite.
+- Release builds and packaging run entirely from the Makefile using standard
+  archive and checksum tools.
 
 ### Fixed
 

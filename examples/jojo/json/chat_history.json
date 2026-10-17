@@ -1,0 +1,1224 @@
+{
+  "joseph.joestar": [
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:00:00 UTC",
+      "Content": "I booked the hotel. Nobody touch the room-service menu.",
+      "isSender": false,
+      "Created(microseconds)": 1775041200000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:01:00 UTC",
+      "Content": "Did you check that the hotel actually exists this time?",
+      "isSender": true,
+      "Created(microseconds)": 1775041260000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:00:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775044800000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:01:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775044860000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "noriaki.kakyoin": [
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:02:00 UTC",
+      "Content": "Found a quiet arcade near the station. Meet after the briefing?",
+      "isSender": false,
+      "Created(microseconds)": 1775041320000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:03:00 UTC",
+      "Content": "Bring the route notes. We can plan between rounds.",
+      "isSender": true,
+      "Created(microseconds)": 1775041380000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:02:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775044920000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:03:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775044980000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "jean.pierre.polnareff": [
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:04:00 UTC",
+      "Content": "Important question: does the next stop have a bakery?",
+      "isSender": false,
+      "Created(microseconds)": 1775041440000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:05:00 UTC",
+      "Content": "You have asked that at every stop.",
+      "isSender": true,
+      "Created(microseconds)": 1775041500000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:04:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775045040000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:05:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775045100000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "muhammad.avdol": [
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:06:00 UTC",
+      "Content": "The forecast is clear. Pack extra water for the walk.",
+      "isSender": false,
+      "Created(microseconds)": 1775041560000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:07:00 UTC",
+      "Content": "Already packed. I put an extra bottle in your bag too.",
+      "isSender": true,
+      "Created(microseconds)": 1775041620000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:06:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775045160000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:07:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775045220000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "iggy": [
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:08:00 UTC",
+      "Content": "Someone left coffee gum next to the map. I am considering this a gift.",
+      "isSender": false,
+      "Created(microseconds)": 1775041680000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:09:00 UTC",
+      "Content": "That was our entire emergency supply.",
+      "isSender": true,
+      "Created(microseconds)": 1775041740000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:08:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775045280000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:09:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775045340000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "josuke.higashikata": [
+    {
+      "From": "josuke.higashikata",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:10:00 UTC",
+      "Content": "Fixed the travel radio. Please stop dropping it down stairs.",
+      "isSender": false,
+      "Created(microseconds)": 1775041800000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:11:00 UTC",
+      "Content": "Send the repair bill to the Foundation.",
+      "isSender": true,
+      "Created(microseconds)": 1775041860000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "josuke.higashikata",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:10:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775045400000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:11:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775045460000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "koichi.hirose": [
+    {
+      "From": "koichi.hirose",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:12:00 UTC",
+      "Content": "The station signs are all in the notes now. You should be set!",
+      "isSender": false,
+      "Created(microseconds)": 1775041920000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:13:00 UTC",
+      "Content": "Thanks. This is more useful than Grandpa's hand-drawn map.",
+      "isSender": true,
+      "Created(microseconds)": 1775041980000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "koichi.hirose",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:12:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775045520000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:13:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775045580000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "rohan.kishibe": [
+    {
+      "From": "rohan.kishibe",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:14:00 UTC",
+      "Content": "Your travel journal needs stronger panel composition.",
+      "isSender": false,
+      "Created(microseconds)": 1775042040000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:15:00 UTC",
+      "Content": "It is a grocery list, Rohan.",
+      "isSender": true,
+      "Created(microseconds)": 1775042100000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "rohan.kishibe",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:14:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775045640000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:15:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775045700000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "giorno.giovanna": [
+    {
+      "From": "giorno.giovanna",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:16:00 UTC",
+      "Content": "I can arrange a ride from the airport. No questions asked.",
+      "isSender": false,
+      "Created(microseconds)": 1775042160000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:17:00 UTC",
+      "Content": "A normal taxi will do.",
+      "isSender": true,
+      "Created(microseconds)": 1775042220000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "giorno.giovanna",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:16:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775045760000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:17:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775045820000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "bruno.bucciarati": [
+    {
+      "From": "bruno.bucciarati",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:18:00 UTC",
+      "Content": "There is room for the whole group at the restaurant tonight.",
+      "isSender": false,
+      "Created(microseconds)": 1775042280000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:19:00 UTC",
+      "Content": "Reserve one extra chair. Polnareff is bringing dessert.",
+      "isSender": true,
+      "Created(microseconds)": 1775042340000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "bruno.bucciarati",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:18:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775045880000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:19:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775045940000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "guido.mista": [
+    {
+      "From": "guido.mista",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:20:00 UTC",
+      "Content": "Can we change the meeting room? I have a very specific concern.",
+      "isSender": false,
+      "Created(microseconds)": 1775042400000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:21:00 UTC",
+      "Content": "We are meeting outside. There is no room number.",
+      "isSender": true,
+      "Created(microseconds)": 1775042460000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "guido.mista",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:20:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775046000000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:21:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775046060000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "narancia.ghirga": [
+    {
+      "From": "narancia.ghirga",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:22:00 UTC",
+      "Content": "I made a playlist for the drive. It is only six hours long.",
+      "isSender": false,
+      "Created(microseconds)": 1775042520000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:23:00 UTC",
+      "Content": "The drive is forty minutes.",
+      "isSender": true,
+      "Created(microseconds)": 1775042580000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "narancia.ghirga",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:22:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775046120000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:23:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775046180000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "jolyne.cujoh": [
+    {
+      "From": "jolyne.cujoh",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:24:00 UTC",
+      "Content": "Dad, you left your marine biology notes on the kitchen table.",
+      "isSender": false,
+      "Created(microseconds)": 1775042640000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:25:00 UTC",
+      "Content": "Keep them away from the aquarium. I will call tonight.",
+      "isSender": true,
+      "Created(microseconds)": 1775042700000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "jolyne.cujoh",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:24:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775046240000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:25:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775046300000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "ermes.costello": [
+    {
+      "From": "ermes.costello",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:26:00 UTC",
+      "Content": "Found a good place for lunch. Jolyne has the address.",
+      "isSender": false,
+      "Created(microseconds)": 1775042760000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:27:00 UTC",
+      "Content": "Send me the pin and I will meet you there.",
+      "isSender": true,
+      "Created(microseconds)": 1775042820000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "ermes.costello",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:26:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775046360000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:27:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775046420000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "speedwagon.foundation": [
+    {
+      "From": "speedwagon.foundation",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:28:00 UTC",
+      "Content": "Travel expenses approved. Please keep every receipt this time.",
+      "isSender": false,
+      "Created(microseconds)": 1775042880000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 11:29:00 UTC",
+      "Content": "Even the coffee gum?",
+      "isSender": true,
+      "Created(microseconds)": 1775042940000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "speedwagon.foundation",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:28:00 UTC",
+      "Content": "I added it to the shared trip notes. See you at the next stop.",
+      "isSender": false,
+      "Created(microseconds)": 1775046480000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 12:29:00 UTC",
+      "Content": "Got it. Keep your phone charged.",
+      "isSender": true,
+      "Created(microseconds)": 1775046540000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ],
+  "stardust.crusaders": [
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-03-24 09:00:00 UTC",
+      "Content": "Daily travel check: tickets, passports, and absolutely no surprise detours.",
+      "isSender": false,
+      "Created(microseconds)": 1774342800000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-03-24 09:05:00 UTC",
+      "Content": "I have the backup map. The route is saved offline too.",
+      "isSender": false,
+      "Created(microseconds)": 1774343100000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-03-24 09:10:00 UTC",
+      "Content": "Added a bakery stop to the route. This is a strategic decision.",
+      "isSender": false,
+      "Created(microseconds)": 1774343400000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-03-24 09:15:00 UTC",
+      "Content": "One stop. We are staying on schedule.",
+      "isSender": true,
+      "Created(microseconds)": 1774343700000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-03-24 09:20:00 UTC",
+      "Content": "Water and first-aid supplies are restocked.",
+      "isSender": false,
+      "Created(microseconds)": 1774344000000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-03-24 09:25:00 UTC",
+      "Content": "Coffee gum inventory: classified.",
+      "isSender": false,
+      "Created(microseconds)": 1774344300000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-03-25 09:00:00 UTC",
+      "Content": "Daily travel check: tickets, passports, and absolutely no surprise detours.",
+      "isSender": false,
+      "Created(microseconds)": 1774429200000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-03-25 09:05:00 UTC",
+      "Content": "I have the backup map. The route is saved offline too.",
+      "isSender": false,
+      "Created(microseconds)": 1774429500000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-03-25 09:10:00 UTC",
+      "Content": "Added a bakery stop to the route. This is a strategic decision.",
+      "isSender": false,
+      "Created(microseconds)": 1774429800000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-03-25 09:15:00 UTC",
+      "Content": "One stop. We are staying on schedule.",
+      "isSender": true,
+      "Created(microseconds)": 1774430100000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-03-25 09:20:00 UTC",
+      "Content": "Water and first-aid supplies are restocked.",
+      "isSender": false,
+      "Created(microseconds)": 1774430400000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-03-25 09:25:00 UTC",
+      "Content": "Coffee gum inventory: classified.",
+      "isSender": false,
+      "Created(microseconds)": 1774430700000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-03-26 09:00:00 UTC",
+      "Content": "Daily travel check: tickets, passports, and absolutely no surprise detours.",
+      "isSender": false,
+      "Created(microseconds)": 1774515600000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-03-26 09:05:00 UTC",
+      "Content": "I have the backup map. The route is saved offline too.",
+      "isSender": false,
+      "Created(microseconds)": 1774515900000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-03-26 09:10:00 UTC",
+      "Content": "Added a bakery stop to the route. This is a strategic decision.",
+      "isSender": false,
+      "Created(microseconds)": 1774516200000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-03-26 09:15:00 UTC",
+      "Content": "One stop. We are staying on schedule.",
+      "isSender": true,
+      "Created(microseconds)": 1774516500000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-03-26 09:20:00 UTC",
+      "Content": "Water and first-aid supplies are restocked.",
+      "isSender": false,
+      "Created(microseconds)": 1774516800000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-03-26 09:25:00 UTC",
+      "Content": "Coffee gum inventory: classified.",
+      "isSender": false,
+      "Created(microseconds)": 1774517100000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-03-27 09:00:00 UTC",
+      "Content": "Daily travel check: tickets, passports, and absolutely no surprise detours.",
+      "isSender": false,
+      "Created(microseconds)": 1774602000000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-03-27 09:05:00 UTC",
+      "Content": "I have the backup map. The route is saved offline too.",
+      "isSender": false,
+      "Created(microseconds)": 1774602300000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-03-27 09:10:00 UTC",
+      "Content": "Added a bakery stop to the route. This is a strategic decision.",
+      "isSender": false,
+      "Created(microseconds)": 1774602600000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-03-27 09:15:00 UTC",
+      "Content": "One stop. We are staying on schedule.",
+      "isSender": true,
+      "Created(microseconds)": 1774602900000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-03-27 09:20:00 UTC",
+      "Content": "Water and first-aid supplies are restocked.",
+      "isSender": false,
+      "Created(microseconds)": 1774603200000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-03-27 09:25:00 UTC",
+      "Content": "Coffee gum inventory: classified.",
+      "isSender": false,
+      "Created(microseconds)": 1774603500000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-03-28 09:00:00 UTC",
+      "Content": "Daily travel check: tickets, passports, and absolutely no surprise detours.",
+      "isSender": false,
+      "Created(microseconds)": 1774688400000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-03-28 09:05:00 UTC",
+      "Content": "I have the backup map. The route is saved offline too.",
+      "isSender": false,
+      "Created(microseconds)": 1774688700000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-03-28 09:10:00 UTC",
+      "Content": "Added a bakery stop to the route. This is a strategic decision.",
+      "isSender": false,
+      "Created(microseconds)": 1774689000000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-03-28 09:15:00 UTC",
+      "Content": "One stop. We are staying on schedule.",
+      "isSender": true,
+      "Created(microseconds)": 1774689300000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-03-28 09:20:00 UTC",
+      "Content": "Water and first-aid supplies are restocked.",
+      "isSender": false,
+      "Created(microseconds)": 1774689600000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-03-28 09:25:00 UTC",
+      "Content": "Coffee gum inventory: classified.",
+      "isSender": false,
+      "Created(microseconds)": 1774689900000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-03-29 09:00:00 UTC",
+      "Content": "Daily travel check: tickets, passports, and absolutely no surprise detours.",
+      "isSender": false,
+      "Created(microseconds)": 1774774800000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-03-29 09:05:00 UTC",
+      "Content": "I have the backup map. The route is saved offline too.",
+      "isSender": false,
+      "Created(microseconds)": 1774775100000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-03-29 09:10:00 UTC",
+      "Content": "Added a bakery stop to the route. This is a strategic decision.",
+      "isSender": false,
+      "Created(microseconds)": 1774775400000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-03-29 09:15:00 UTC",
+      "Content": "One stop. We are staying on schedule.",
+      "isSender": true,
+      "Created(microseconds)": 1774775700000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-03-29 09:20:00 UTC",
+      "Content": "Water and first-aid supplies are restocked.",
+      "isSender": false,
+      "Created(microseconds)": 1774776000000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-03-29 09:25:00 UTC",
+      "Content": "Coffee gum inventory: classified.",
+      "isSender": false,
+      "Created(microseconds)": 1774776300000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-03-30 09:00:00 UTC",
+      "Content": "Daily travel check: tickets, passports, and absolutely no surprise detours.",
+      "isSender": false,
+      "Created(microseconds)": 1774861200000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-03-30 09:05:00 UTC",
+      "Content": "I have the backup map. The route is saved offline too.",
+      "isSender": false,
+      "Created(microseconds)": 1774861500000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-03-30 09:10:00 UTC",
+      "Content": "Added a bakery stop to the route. This is a strategic decision.",
+      "isSender": false,
+      "Created(microseconds)": 1774861800000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-03-30 09:15:00 UTC",
+      "Content": "One stop. We are staying on schedule.",
+      "isSender": true,
+      "Created(microseconds)": 1774862100000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-03-30 09:20:00 UTC",
+      "Content": "Water and first-aid supplies are restocked.",
+      "isSender": false,
+      "Created(microseconds)": 1774862400000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-03-30 09:25:00 UTC",
+      "Content": "Coffee gum inventory: classified.",
+      "isSender": false,
+      "Created(microseconds)": 1774862700000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-03-31 09:00:00 UTC",
+      "Content": "Daily travel check: tickets, passports, and absolutely no surprise detours.",
+      "isSender": false,
+      "Created(microseconds)": 1774947600000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-03-31 09:05:00 UTC",
+      "Content": "I have the backup map. The route is saved offline too.",
+      "isSender": false,
+      "Created(microseconds)": 1774947900000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-03-31 09:10:00 UTC",
+      "Content": "Added a bakery stop to the route. This is a strategic decision.",
+      "isSender": false,
+      "Created(microseconds)": 1774948200000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-03-31 09:15:00 UTC",
+      "Content": "One stop. We are staying on schedule.",
+      "isSender": true,
+      "Created(microseconds)": 1774948500000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-03-31 09:20:00 UTC",
+      "Content": "Water and first-aid supplies are restocked.",
+      "isSender": false,
+      "Created(microseconds)": 1774948800000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-03-31 09:25:00 UTC",
+      "Content": "Coffee gum inventory: classified.",
+      "isSender": false,
+      "Created(microseconds)": 1774949100000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 17:35:00 UTC",
+      "Content": "Cairo at last! Team briefing in the hotel lobby at 18:00.",
+      "isSender": false,
+      "Created(microseconds)": 1775064900000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 17:36:00 UTC",
+      "Content": "The Foundation confirmed our rooms. Everyone has a key at reception.",
+      "isSender": false,
+      "Created(microseconds)": 1775064960000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 17:37:00 UTC",
+      "Content": "Good news: I found the bakery. Better news: it is on the way.",
+      "isSender": false,
+      "Created(microseconds)": 1775065020000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "PHOTO",
+      "Created": "2026-04-01 17:38:00 UTC",
+      "Content": "Sharing the final route. Blue line is the short walk; gold stars are meeting points.",
+      "isSender": false,
+      "Created(microseconds)": 1775065080000000,
+      "IsSaved": true,
+      "Media IDs": "b~cairo-route"
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 17:39:00 UTC",
+      "Content": "Save this map. We leave together, and we come back together.",
+      "isSender": true,
+      "Created(microseconds)": 1775065140000000,
+      "IsSaved": true,
+      "Media IDs": ""
+    },
+    {
+      "From": "joseph.joestar",
+      "Media Type": "FILE",
+      "Created": "2026-04-01 17:40:00 UTC",
+      "Content": "I also uploaded the checklist. Please read it before packing.",
+      "isSender": false,
+      "Created(microseconds)": 1775065200000000,
+      "IsSaved": true,
+      "Media IDs": "b~travel-notes"
+    },
+    {
+      "From": "iggy",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 17:41:00 UTC",
+      "Content": "The checklist has no section for coffee gum. I have filed a complaint.",
+      "isSender": false,
+      "Created(microseconds)": 1775065260000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "muhammad.avdol",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 17:42:00 UTC",
+      "Content": "Updated: water, passports, chargers, and coffee gum.",
+      "isSender": false,
+      "Created(microseconds)": 1775065320000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jean.pierre.polnareff",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 17:43:00 UTC",
+      "Content": "And the pastries. Nobody forget the pastries.",
+      "isSender": false,
+      "Created(microseconds)": 1775065380000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "noriaki.kakyoin",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 17:44:00 UTC",
+      "Content": "Everything is saved offline. Meet you downstairs in ten.",
+      "isSender": false,
+      "Created(microseconds)": 1775065440000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    },
+    {
+      "From": "jotaro.kujo",
+      "Media Type": "TEXT",
+      "Created": "2026-04-01 17:45:00 UTC",
+      "Content": "All right. Phones charged, map saved. Let's get moving.",
+      "isSender": true,
+      "Created(microseconds)": 1775065500000000,
+      "IsSaved": false,
+      "Media IDs": ""
+    }
+  ]
+}

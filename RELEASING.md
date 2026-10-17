@@ -6,7 +6,8 @@ is a separate step after reviewing the draft release.
 
 ## Build and review
 
-Use Go 1.26 or newer. Packaging also requires Make and Python 3.9 or newer.
+Use Go 1.26 or newer. Packaging requires Make, `tar`, `zip`, and either
+`sha256sum` or `shasum`. All release steps live in the Makefile.
 
 ```sh
 make check
@@ -24,8 +25,9 @@ make release
 | Windows | amd64, arm64 | `.zip` |
 
 Artifacts are named `snaparser_1.0.0_<os>_<arch>` and placed in `dist/v1.0.0/`.
-Each archive includes the binary, README, changelog, example TOML, project license,
-and frontend documentation/license. Only explicitly listed release files are
+Each archive includes the binary, README and screenshots, changelog, example TOML,
+fictional JoJo demo export, project license, and frontend documentation/license.
+Only explicitly listed release files are
 packaged; private exports, databases, and local configuration are excluded.
 
 Verify the checksums and run the binary from the archive for your platform:
@@ -64,7 +66,8 @@ GitHub. The workflow leaves the release as a draft.
 ## Subsequent releases
 
 Update the version constant, add the new changelog entry, and update the README's
-versioned examples. `scripts/release.py` reads the version from the CLI source;
+versioned examples. The Makefile reads the version from the CLI source;
 `RELEASE_VERSION` can assert the expected version but cannot change the binary's
-version. CI checks the minimum supported Go version and the current stable Go
+version. Set `RELEASE_DIR` to choose a different output directory. CI checks the
+minimum supported Go version and the current stable Go
 version. The release workflow builds with the current stable Go version.

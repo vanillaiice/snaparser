@@ -2,6 +2,9 @@ bin/
 *.txt
 *.json
 
+# Public, fictional export used by the README screenshots.
+!examples/jojo/json/*.json
+
 # Binaries for programs and plugins
 *.exe
 *.exe~

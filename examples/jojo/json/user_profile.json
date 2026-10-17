@@ -1,0 +1,90 @@
+{
+  "App Profile": {
+    "Country": "Egypt",
+    "Creation Time": "2026-03-20 09:00:00 UTC",
+    "Account Creation Country": "Japan",
+    "Platform Version": "Android 16",
+    "In-app Language": "English"
+  },
+  "Demographics": {
+    "Cohort Age": "25–34",
+    "Derived Ad Demographic": "Travel and culture"
+  },
+  "Engagement": [
+    {
+      "Event": "Chats sent",
+      "Occurrences": 119
+    },
+    {
+      "Event": "Snaps sent",
+      "Occurrences": 52
+    },
+    {
+      "Event": "Stories viewed",
+      "Occurrences": 28
+    },
+    {
+      "Event": "Calls started",
+      "Occurrences": 12
+    }
+  ],
+  "Discover Channels Viewed": [
+    {
+      "Channel Name": "Speedwagon field notes"
+    },
+    {
+      "Channel Name": "Morioh weekend guide"
+    },
+    {
+      "Channel Name": "Marine biology minute"
+    },
+    {
+      "Channel Name": "Cairo after sunset"
+    }
+  ],
+  "Ads You Interacted With": [
+    {
+      "Advertiser Name": "Speedwagon Travel Supply",
+      "Date": "2026-03-28"
+    }
+  ],
+  "Breakdown of Time Spent on App": [
+    "Chat: 48 minutes",
+    "Camera: 12 minutes",
+    "Stories: 9 minutes",
+    "Calls: 16 minutes"
+  ],
+  "Content Categories": [
+    "Travel",
+    "Marine biology",
+    "Adventure",
+    "Coffee",
+    "Music",
+    "Photography",
+    "History",
+    "Art",
+    "Food",
+    "Maps",
+    "Wildlife",
+    "Architecture"
+  ],
+  "Interactions": {
+    "Web Interactions": [
+      "speedwagon.example.com/field-notes",
+      "morioh.example.com/weekend",
+      "cairo.example.com/transit",
+      "marine-biology.example.com/journals",
+      "travel.example.com/offline-maps",
+      "bakery.example.com/menu",
+      "foundation.example.com/receipts",
+      "hotel.example.com/booking"
+    ],
+    "App Interactions": [
+      "Offline maps opened",
+      "Travel checklist saved",
+      "Foundation expenses submitted",
+      "Group route shared"
+    ]
+  },
+  "Mobile Ad Id": "00000000-0000-4000-8000-000000000001"
+}

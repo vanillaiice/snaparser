@@ -1,0 +1,163 @@
+{
+  "Friends": [
+    {
+      "Username": "joseph.joestar",
+      "Display Name": "Joseph Joestar",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "noriaki.kakyoin",
+      "Display Name": "Noriaki Kakyoin",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "jean.pierre.polnareff",
+      "Display Name": "Jean Pierre Polnareff",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "muhammad.avdol",
+      "Display Name": "Muhammad Avdol",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "iggy",
+      "Display Name": "Iggy",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "josuke.higashikata",
+      "Display Name": "Josuke Higashikata",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "koichi.hirose",
+      "Display Name": "Koichi Hirose",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "rohan.kishibe",
+      "Display Name": "Rohan Kishibe",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "giorno.giovanna",
+      "Display Name": "Giorno Giovanna",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "bruno.bucciarati",
+      "Display Name": "Bruno Bucciarati",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "guido.mista",
+      "Display Name": "Guido Mista",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "narancia.ghirga",
+      "Display Name": "Narancia Ghirga",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "jolyne.cujoh",
+      "Display Name": "Jolyne Cujoh",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "ermes.costello",
+      "Display Name": "Ermes Costello",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    },
+    {
+      "Username": "speedwagon.foundation",
+      "Display Name": "Speedwagon Foundation",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    }
+  ],
+  "Blocked Users": [
+    {
+      "Username": "dio.brando",
+      "Display Name": "DIO",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Search"
+    }
+  ],
+  "Friend Requests Sent": [
+    {
+      "Username": "lisa.lisa",
+      "Display Name": "Lisa Lisa",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    }
+  ],
+  "Deleted Friends": [
+    {
+      "Username": "rubber.soul",
+      "Display Name": "Rubber Soul",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    }
+  ],
+  "Hidden Friend Suggestions": [
+    {
+      "Username": "yoshikage.kira",
+      "Display Name": "Yoshikage Kira",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Quick Add"
+    }
+  ],
+  "Ignored Snapchatters": [
+    {
+      "Username": "enrico.pucci",
+      "Display Name": "Enrico Pucci",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Quick Add"
+    }
+  ],
+  "Pending Requests": [
+    {
+      "Username": "foo.fighters",
+      "Display Name": "Foo Fighters",
+      "Creation Timestamp": "2026-03-20 10:00:00 UTC",
+      "Last Modified Timestamp": "2026-04-01 17:00:00 UTC",
+      "Source": "Added by Username"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "Display Name Change": [
+    {
+      "Date": "2026-03-20 09:01:00 UTC",
+      "Display Name": "Jotaro Kujo"
+    },
+    {
+      "Date": "2026-03-26 18:00:00 UTC",
+      "Display Name": "Jotaro | Cairo trip"
+    }
+  ],
+  "Email Change": [
+    {
+      "Date": "2026-03-20 09:02:00 UTC",
+      "Email Address": "jotaro@example.com"
+    }
+  ],
+  "Password Change": [
+    {
+      "Date": "2026-03-29 11:00:00 UTC"
+    }
+  ],
+  "Snapchat Linked To Bitmoji": [
+    {
+      "Date": "2026-03-21 08:00:00 UTC"
+    }
+  ],
+  "Download My Data Reports": [
+    {
+      "Date": "2026-04-01 18:00:00 UTC",
+      "Status": "COMPLETED",
+      "Email Address": "jotaro@example.com"
+    }
+  ]
+}

@@ -3,6 +3,8 @@
 Snaparser turns Snapchat exports into a searchable local archive.
 The parser, SQLite database, and HTMX frontend run in one Go binary.
 
+![Snaparser chats with a fictional JoJo-themed conversation and route-map attachment](docs/screenshots/chats.png)
+
 Start the browser without supplying paths:
 
 ```sh
@@ -10,11 +12,12 @@ go run ./cmd/snaparser serve
 # http://127.0.0.1:8080
 ```
 
-If there is no existing archive, the browser opens setup with an in-page folder browser.
+If there is no existing archive, the browser opens setup with an in-page folder
+browser.
 Browse to the unzipped Snapchat export and click **Use this folder**, or enter
 its path directly. Processing runs in the background, and the archive opens
-automatically when it finishes. The
-folder browser reads folders on the machine running Snaparser.
+automatically when it finishes. The folder browser reads folders on the machine
+running Snaparser.
 
 The **Archive** button lets you select another export or **Rebuild archive**
 from the saved export. Both actions refresh the database and attachment index
@@ -54,6 +57,32 @@ The browser includes:
 All sections support ordinary links and forms as well as HTMX navigation, with
 System, Light, and Dark themes. See [frontend/README.md](frontend/README.md) for
 server integration and view behavior.
+
+# Demo and screenshots
+
+The screenshots use a completely fictional export inspired by *JoJo's Bizarre
+Adventure*. Try the same conversations, friends, snaps, calls, and account details:
+
+```sh
+go run ./cmd/snaparser serve --data ./examples/jojo --db ./jojo-demo.db
+# http://127.0.0.1:8080 — select stardust.crusaders
+```
+
+The demo uses its own database. See [examples/jojo](examples/jojo/README.md) for
+details; its export also includes a route-map image and a travel checklist.
+
+<details>
+<summary>More screenshots: friends, snap history, calls, and account</summary>
+
+| Friends | Snap history (dark theme) |
+| --- | --- |
+| ![Friends with JoJo character names and links to their chats](docs/screenshots/friends.png) | ![Snap history in the dark theme](docs/screenshots/snaps.png) |
+
+| Calls | Account |
+| --- | --- |
+| ![Fictional incoming and outgoing call history](docs/screenshots/calls.png) | ![Aligned account, device, and profile cards for the demo account](docs/screenshots/account.png) |
+
+</details>
 
 # Architecture
 
@@ -250,8 +279,9 @@ storage can be implemented; their contents are not stored or displayed.
 
 `make release` runs the checks and creates archives for Linux, macOS, and Windows
 on amd64 and arm64 under `dist/v1.0.0/`, including documentation, the example TOML,
-licenses, and `SHA256SUMS`. Building requires Go 1.26 or newer, Make, and Python
-3.9 or newer for packaging. Normal builds need only Go.
+licenses, screenshots, the fictional demo export, and `SHA256SUMS`. Packaging lives
+entirely in the Makefile and requires Go 1.26 or newer, Make, `tar`, `zip`, and
+either `sha256sum` or `shasum`. Normal builds need only Go.
 
 See [RELEASING.md](RELEASING.md) for the release procedure and
 [CHANGELOG.md](CHANGELOG.md) for the 1.0.0 release notes. The tag workflow creates
