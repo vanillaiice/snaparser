@@ -20,3 +20,10 @@ bin/
 
 # Go workspace file
 go.work
+
+data
+
+# Local archive databases
+*.db
+*.db-wal
+*.db-shm

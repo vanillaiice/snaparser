@@ -1,52 +1,53 @@
-// Package parser parses snapchat chat history from a json file to a struct.
 package parser
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"path/filepath"
 )
 
-// Content contains the fields in the chat history json file
-type Content struct {
-	From               string
-	MediaType          string `json:"Media Type"`
-	Created            string
-	Content            string `json:",omitempty"`
-	ConversationTitle  string `json:"Conversation Title"`
-	IsSender           bool   `json:"isSender"`
-	CreatedMicrosecond int64  `json:"Created(microseconds)"`
+type Parser func() any
+
+var parsers = map[string]Parser{
+	"account.json":         func() any { return &Account{} },
+	"account_history.json": func() any { return &AccountHistory{} },
+	// "bitmoji.json": func() any { return &Bitmoji{},
+	"chat_history.json": func() any { return &ChatHistory{} },
+	// "connected_apps.json": func() any { return &ConnectedApps{} },
+	// "feature_emails.json": func() any { return &FeatureEmails{} },
+	"friends.json":      func() any { return &Friends{} },
+	"snap_history.json": func() any { return &SnapHistory{} },
+	"snap_pro.json":     func() any { return &SnapProfile{} },
+	"talk_history.json": func() any { return &TalkHistory{} },
+	"user_profile.json": func() any { return &UserProfile{} },
 }
 
-// ParseAll parses the chat history. It returns a map of usernames,
-// a Content slice, and any error encountered.
-func ParseAll(r io.Reader) (data map[string][]*Content, err error) {
-	in, err := io.ReadAll(r)
-	if err != nil {
-		return
-	}
-	err = json.Unmarshal(in, &data)
-	return
-}
-
-// ParseUser parses the chat history with one user.
-// It returns a Content slice, and any encountered error.
-func ParseUser(r io.Reader, user string) (content []*Content, err error) {
-	var data map[string][]*Content
-
-	in, err := io.ReadAll(r)
-	if err != nil {
-		return
-	}
-
-	if err = json.Unmarshal(in, &data); err != nil {
-		return
-	}
-
-	content, ok := data[user]
+func Parse(filename string, r io.Reader) (any, error) {
+	base := filepath.Base(filename)
+	parser, ok := parsers[base]
 	if !ok {
-		return nil, fmt.Errorf("no chats with user: %s", user)
+		return nil, fmt.Errorf("unsupported file: %s", base)
 	}
 
-	return
+	data := parser()
+
+	decoder := json.NewDecoder(r)
+	if err := decoder.Decode(&data); err != nil {
+		return nil, err
+	}
+
+	if data == nil {
+		return nil, fmt.Errorf("%s: expected a JSON object, got null", base)
+	}
+
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return nil, fmt.Errorf("%s: expected one JSON document", base)
+		}
+		return nil, fmt.Errorf("%s: trailing data: %w", base, err)
+	}
+
+	return data, nil
 }

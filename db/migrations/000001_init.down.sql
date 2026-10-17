@@ -1,0 +1,16 @@
+drop table import_history;
+drop table user_profile_entries;
+drop table ad_interactions;
+drop table discover_channels;
+drop table engagements;
+drop table user_profiles;
+drop table snap_profiles;
+drop table calls;
+drop table snaps;
+drop table chats;
+drop table conversations;
+drop table friends;
+drop table account_changes;
+drop table login_history;
+drop table device_history;
+drop table accounts;
