@@ -19,31 +19,33 @@ func RunMigrations(dsn string) error {
 		return err
 	}
 
+	defer conn.Close()
+
+	conn.SetMaxOpenConns(1)
+
+	return runMigrations(conn)
+}
+
+// Migrate the caller's connection so in-memory archives retain their schema.
+func runMigrations(conn *sql.DB) error {
 	source, err := iofs.New(migrations, "migrations")
 	if err != nil {
-		conn.Close()
-
 		return err
 	}
 
+	defer source.Close()
+
 	driver, err := sqlite.WithInstance(conn, &sqlite.Config{})
 	if err != nil {
-		conn.Close()
-
 		return err
 	}
 
 	m, err := migrate.NewWithInstance("iofs", source, "sqlite", driver)
 	if err != nil {
-		driver.Close()
-
-		conn.Close()
-
 		return err
 	}
 
-	defer m.Close()
-
+	// m.Close would also close the connection owned by the caller.
 	if err := m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		return err
 	}

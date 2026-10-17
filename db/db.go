@@ -14,10 +14,6 @@ type DB struct {
 func Open(path string) (*DB, error) {
 	ctx := context.Background()
 
-	if err := RunMigrations(path); err != nil {
-		return nil, err
-	}
-
 	conn, err := sql.Open("sqlite", path)
 	if err != nil {
 		return nil, err
@@ -41,6 +37,12 @@ func Open(path string) (*DB, error) {
 
 			return nil, err
 		}
+	}
+
+	if err := runMigrations(conn); err != nil {
+		conn.Close()
+
+		return nil, err
 	}
 
 	db := &DB{conn: conn}

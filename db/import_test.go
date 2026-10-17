@@ -191,6 +191,23 @@ func TestImportReplacesWholeBackupAndSearchIndexes(t *testing.T) {
 
 	before := databaseSnapshot(t, store)
 
+	schema := func() []string {
+		objects, err := readRows(ctx, store.conn, "select type || ':' || name || ':' || coalesce(sql, '') from sqlite_schema order by name", nil, func(row rowScanner) (string, error) {
+			var object string
+
+			err := row.Scan(&object)
+
+			return object, err
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		return objects
+	}
+
+	schemaBefore := schema()
+
 	text := "newtoken"
 
 	chats := parser.ChatHistory{"new conversation": {{Content: &text}}}
@@ -198,6 +215,10 @@ func TestImportReplacesWholeBackupAndSearchIndexes(t *testing.T) {
 	for range 2 {
 		if err := store.Import(ctx, parser.Backup{ChatHistory: &chats}); err != nil {
 			t.Fatal(err)
+		}
+
+		if !reflect.DeepEqual(schemaBefore, schema()) {
+			t.Fatal("replacement changed schema, indexes, or triggers")
 		}
 
 		for table, rows := range databaseSnapshot(t, store) {
@@ -248,8 +269,20 @@ func TestFailedImportRestoresEveryTableAndSearchIndex(t *testing.T) {
 	before := databaseSnapshot(t, store)
 
 	searchBefore, err := store.Search(ctx, SearchOptions{Query: "oldtoken", Pagination: Pagination{Limit: 500}})
-	if err != nil || len(searchBefore) < 8 {
-		t.Fatalf("fixture must populate every search index: %d results, %v", len(searchBefore), err)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	kinds := make(map[SearchKind]bool)
+
+	for _, result := range searchBefore {
+		kinds[result.Kind] = true
+	}
+
+	for _, kind := range []SearchKind{SearchChats, SearchSnaps, SearchFriends, SearchAccounts, SearchSnapProfiles, SearchChannels, SearchAdvertisers, SearchProfileEntries} {
+		if !kinds[kind] {
+			t.Fatalf("fixture must populate search index %s", kind)
+		}
 	}
 
 	// Fail after all source tables and FTS triggers have been changed.
