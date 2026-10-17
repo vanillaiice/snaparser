@@ -36,8 +36,10 @@ const (
 // Store is satisfied by *db.DB. The caller owns the database's lifecycle.
 type Store interface {
 	ListConversations(context.Context, db.Pagination) ([]db.Conversation, error)
+	ListSnapConversations(context.Context, db.Pagination) ([]db.Conversation, error)
 	GetConversation(context.Context, int64) (db.Conversation, error)
 	GetChatPosition(context.Context, int64) (db.ChatPosition, error)
+	GetSnapPosition(context.Context, int64) (db.MessagePosition, error)
 	ListChats(context.Context, db.MessageOptions) ([]db.Chat, error)
 	ListSnaps(context.Context, db.MessageOptions) ([]db.Snap, error)
 	ListFriends(context.Context, db.FriendOptions) ([]db.Friend, error)
@@ -91,7 +93,7 @@ func New(store Store) (http.Handler, error) {
 	mux.Handle("GET /assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assets))))
 	mux.HandleFunc("GET /{$}", h.archive)
 	mux.HandleFunc("GET /friends", h.details)
-	mux.HandleFunc("GET /snaps", h.details)
+	mux.HandleFunc("GET /snaps", h.archive)
 	mux.HandleFunc("GET /calls", h.details)
 	mux.HandleFunc("GET /account", h.details)
 	mux.HandleFunc("POST /theme", h.setTheme)
@@ -118,7 +120,6 @@ type page struct {
 	Title              string
 	Filter             string
 	Friends            []db.Friend
-	Snaps              []message
 	Calls              []db.Call
 	Changes            []db.AccountChange
 	Details            []detailGroup
@@ -180,10 +181,30 @@ func (p page) URL(conversationID int64, offset, conversationOffset int) string {
 	}
 
 	if len(v) == 0 {
-		return "/"
+		return p.MessagesPath()
 	}
 
-	return "/?" + v.Encode()
+	return p.MessagesPath() + "?" + v.Encode()
+}
+
+func (p page) IsHistory() bool {
+	return p.Section == "" || p.Section == "snaps"
+}
+
+func (p page) MessagesPath() string {
+	if p.Section == "snaps" {
+		return "/snaps"
+	}
+
+	return "/"
+}
+
+func (p page) HistoryLabel() string {
+	if p.Section == "snaps" {
+		return "snaps"
+	}
+
+	return "messages"
 }
 
 func (p page) PreviousMessages() string {
@@ -218,7 +239,7 @@ func (p page) MessageContextURL(conversationID, messageID int64) string {
 		v.Set("conversations_offset", strconv.Itoa(p.ConversationOffset))
 	}
 
-	u := url.URL{Path: "/", RawQuery: v.Encode(), Fragment: fmt.Sprintf("message-%d", messageID)}
+	u := url.URL{Path: p.MessagesPath(), RawQuery: v.Encode(), Fragment: fmt.Sprintf("message-%d", messageID)}
 
 	return u.String()
 }
@@ -229,6 +250,10 @@ func (p page) End() int { return p.Offset + len(p.Messages) }
 
 func (h *handler) archive(w http.ResponseWriter, r *http.Request) {
 	p := page{Theme: requestTheme(r), Query: strings.TrimSpace(r.URL.Query().Get("q"))}
+
+	if r.URL.Path == "/snaps" {
+		p.Section = "snaps"
+	}
 
 	status := http.StatusOK
 
@@ -267,6 +292,10 @@ func (h *handler) archive(w http.ResponseWriter, r *http.Request) {
 
 			if p.MessageID != 0 {
 				p.ErrorTitle, p.Error = "Message not found", "The archive may have been replaced. Search again or select another conversation."
+
+				if p.Section == "snaps" {
+					p.ErrorTitle = "Snap not found"
+				}
 			}
 		} else {
 			status = http.StatusInternalServerError
@@ -290,7 +319,7 @@ func (h *handler) render(w http.ResponseWriter, r *http.Request, p page, status 
 	if r.Header.Get("HX-Request") == "true" && r.Header.Get("HX-History-Restore-Request") != "true" {
 		name = "workspace"
 
-		if r.Header.Get("HX-Target") == "load-older" && p.Query == "" && p.Section == "" {
+		if r.Header.Get("HX-Target") == "load-older" && p.Query == "" && p.IsHistory() {
 			name = "history"
 		}
 	}
@@ -362,7 +391,13 @@ func (h *handler) setTheme(w http.ResponseWriter, r *http.Request) {
 
 func (h *handler) load(ctx context.Context, p *page) error {
 	if p.MessageID != 0 {
-		position, err := h.store.GetChatPosition(ctx, p.MessageID)
+		getPosition := h.store.GetChatPosition
+
+		if p.Section == "snaps" {
+			getPosition = h.store.GetSnapPosition
+		}
+
+		position, err := getPosition(ctx, p.MessageID)
 		if err != nil {
 			return err
 		}
@@ -385,7 +420,13 @@ func (h *handler) load(ctx context.Context, p *page) error {
 		p.AccountUsername = account.BasicInformation.Username
 	}
 
-	conversations, err := h.store.ListConversations(ctx, db.Pagination{Limit: conversationPageSize + 1, Offset: p.ConversationOffset})
+	listConversations := h.store.ListConversations
+
+	if p.Section == "snaps" {
+		listConversations = h.store.ListSnapConversations
+	}
+
+	conversations, err := listConversations(ctx, db.Pagination{Limit: conversationPageSize + 1, Offset: p.ConversationOffset})
 	if err != nil {
 		return err
 	}
@@ -411,7 +452,7 @@ func (h *handler) load(ctx context.Context, p *page) error {
 		names[selected.ID] = selected.Key
 	}
 
-	chats, err := h.store.ListChats(ctx, db.MessageOptions{
+	chats, err := h.listHistory(ctx, p, db.MessageOptions{
 		Pagination:     db.Pagination{Limit: messagePageSize + 1, Offset: p.Offset},
 		ConversationID: p.ConversationID,
 		Query:          searchQuery(p.Query),
@@ -462,6 +503,37 @@ func (h *handler) load(ctx context.Context, p *page) error {
 	}
 
 	return nil
+}
+
+func (h *handler) listHistory(ctx context.Context, p *page, options db.MessageOptions) ([]db.Chat, error) {
+	if p.Section != "snaps" {
+		return h.store.ListChats(ctx, options)
+	}
+
+	snaps, err := h.store.ListSnaps(ctx, options)
+	if err != nil {
+		return nil, err
+	}
+
+	items := make([]db.Chat, 0, len(snaps))
+
+	for _, snap := range snaps {
+		title := snap.ConversationTitle
+
+		if title == nil {
+			title = &snap.ConversationKey
+		}
+
+		items = append(items, db.Chat{
+			ID: snap.ID, ConversationID: snap.ConversationID,
+			Chat: parser.Chat{
+				From: snap.From, MediaType: snap.MediaType, Created: snap.Created,
+				ConversationTitle: title, IsSender: snap.IsSender, CreatedMicrosecond: snap.CreatedMicroseconds,
+			},
+		})
+	}
+
+	return items, nil
 }
 
 // Treat search as words, never as raw FTS syntax. Each word is a quoted prefix,

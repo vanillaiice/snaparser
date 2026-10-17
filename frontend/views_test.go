@@ -84,7 +84,13 @@ func TestArchiveSectionsRenderFullDocumentsAndFragments(t *testing.T) {
 
 			body := full.Body.String()
 
-			if full.Code != 200 || !strings.Contains(body, "<!doctype html>") || !strings.Contains(body, `id="records"`) || !strings.Contains(body, `href="/`+section+`" aria-current="page"`) {
+			container := "records"
+
+			if section == "snaps" {
+				container = "archive"
+			}
+
+			if full.Code != 200 || !strings.Contains(body, "<!doctype html>") || !strings.Contains(body, `id="`+container+`"`) || !strings.Contains(body, `href="/`+section+`" aria-current="page"`) {
 				t.Fatalf("section document failed: %d", full.Code)
 			}
 
@@ -153,13 +159,23 @@ func TestSnapsScopeOrderingAndConversationLinks(t *testing.T) {
 
 	body := get(h, target).Body.String()
 
-	if strings.Count(body, "PHOTO</td>") != 40 || strings.Contains(body, "VIDEO</td>") || !strings.Contains(body, fmt.Sprintf(`href="/?conversation=%d"`, alexID)) || !strings.Contains(body, "Incoming</td>") || !strings.Contains(body, "Outgoing</td>") {
-		t.Fatal("snaps must be scoped and link to unfiltered chat conversations")
+	if strings.Count(body, `<article id="message-`) != 40 || strings.Contains(body, ">VIDEO</span>") || !strings.Contains(body, `class="conversation-pane"`) || !strings.Contains(body, `class="message outgoing`) || !strings.Contains(body, "Snap metadata") || strings.Contains(body, "Attachment unavailable") {
+		t.Fatal("snap search must use conversation navigation and incoming/outgoing bubbles")
+	}
+
+	if !strings.Contains(body, fmt.Sprintf(`href="/snaps?conversation=%d&amp;`, alexID)) || !strings.Contains(body, `action="/snaps"`) {
+		t.Fatal("snap navigation and search must stay in snap history")
+	}
+
+	conversation := get(h, fmt.Sprintf("/snaps?conversation=%d", alexID)).Body.String()
+
+	if !strings.Contains(conversation, fmt.Sprintf(`href="/?conversation=%d"`, alexID)) || !strings.Contains(conversation, "45 snaps") {
+		t.Fatal("snap conversations must show their snap count and a link to chats")
 	}
 
 	second := get(h, target+"&offset=40").Body.String()
 
-	if strings.Count(second, "PHOTO</td>") != 5 || !strings.Contains(second, "41–45") {
+	if strings.Count(second, `<article id="message-`) != 5 || !strings.Contains(second, "41–45") {
 		t.Fatal("snap pagination failed")
 	}
 
@@ -231,8 +247,8 @@ func TestDetailsEmptyInvalidAndUnavailableStates(t *testing.T) {
 		}
 	}
 
-	for _, target := range []string{"/friends?filter=unknown", "/calls?filter=unknown", "/snaps?filter=unknown", "/account?offset=-1", "/calls?offset=abc", "/snaps?conversation=-1", "/friends?q=" + strings.Repeat("x", 501)} {
-		if response := get(h, target, "HX-Request", "true"); response.Code != 400 || !strings.Contains(response.Body.String(), `id="records"`) {
+	for _, target := range []string{"/friends?filter=unknown", "/calls?filter=unknown", "/account?offset=-1", "/calls?offset=abc", "/snaps?conversation=-1", "/friends?q=" + strings.Repeat("x", 501)} {
+		if response := get(h, target, "HX-Request", "true"); response.Code != 400 || !strings.Contains(response.Body.String(), `id="workspace"`) {
 			t.Errorf("invalid request %s returned %d", target, response.Code)
 		}
 	}

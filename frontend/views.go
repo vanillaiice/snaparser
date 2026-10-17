@@ -76,7 +76,7 @@ func (p page) RecordsURL(offset int) string {
 }
 
 func (p page) CurrentURL() string {
-	if p.Section != "" {
+	if !p.IsHistory() {
 		return p.RecordsURL(p.Offset)
 	}
 
@@ -95,9 +95,6 @@ func (p page) RecordCount() int {
 	switch p.Section {
 	case "friends":
 		return len(p.Friends)
-
-	case "snaps":
-		return len(p.Snaps)
 
 	case "calls":
 		return len(p.Calls)
@@ -118,7 +115,7 @@ func (h *handler) details(w http.ResponseWriter, r *http.Request) {
 		Filter: r.URL.Query().Get("filter"),
 	}
 
-	p.Title = map[string]string{"friends": "Friends", "snaps": "Snap history", "calls": "Calls", "account": "Account"}[p.Section]
+	p.Title = map[string]string{"friends": "Friends", "calls": "Calls", "account": "Account"}[p.Section]
 
 	offset, err := nonnegative(r.URL.Query().Get("offset"))
 
@@ -189,39 +186,6 @@ func (h *handler) loadDetails(ctx context.Context, p *page) error {
 		p.MoreRecords = len(friends) > recordPageSize
 
 		p.Friends = friends[:min(len(friends), recordPageSize)]
-
-	case "snaps":
-		if p.ConversationID != 0 {
-			conversation, err := h.store.GetConversation(ctx, p.ConversationID)
-			if err != nil {
-				return err
-			}
-
-			p.Selected = &conversation
-		}
-
-		snaps, err := h.store.ListSnaps(ctx, db.MessageOptions{Pagination: pagination, ConversationID: p.ConversationID, Query: searchQuery(p.Query)})
-		if err != nil {
-			return err
-		}
-
-		p.MoreRecords = len(snaps) > recordPageSize
-
-		for _, snap := range snaps[:min(len(snaps), recordPageSize)] {
-			created, day, datetime := messageDate(snap.Created, snap.CreatedMicroseconds)
-
-			name := snap.ConversationKey
-
-			if snap.ConversationTitle != nil {
-				name = first(*snap.ConversationTitle, name)
-			}
-
-			p.Snaps = append(p.Snaps, message{
-				ID: snap.ID, From: snap.From, MediaType: snap.MediaType, Outgoing: snap.IsSender,
-				Created: created, Day: day, DateTime: datetime, ConversationName: name,
-				ConversationURL: (page{}).URL(snap.ConversationID, 0, 0),
-			})
-		}
 
 	case "calls":
 		calls, err := h.store.ListCalls(ctx, db.CallOptions{Pagination: pagination, Direction: p.Filter, Query: p.Query})

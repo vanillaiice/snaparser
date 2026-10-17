@@ -1021,61 +1021,196 @@ button:disabled {
   font-weight: 600;
 }
 
-.detail-groups {
+.account-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-  align-items: start;
-  gap: 18px;
+  gap: 24px;
+  min-width: 0;
 }
 
-.detail-card {
-  padding: 18px;
+.account-layout .detail-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+}
+
+.account-layout .detail-card,
+.account-layout .detail-section,
+.account-layout .detail-disclosure {
+  min-width: 0;
+  margin: 0;
   border: 1px solid var(--line);
   border-radius: 10px;
+  overflow: hidden;
   overflow-wrap: anywhere;
 }
 
-.detail-card h2,
-.detail-section h2 {
-  margin: 0 0 14px;
-  font-size: 15px;
+.account-layout .detail-card {
+  display: flex;
+  flex-direction: column;
 }
 
-.detail-card dl {
+.account-layout h2 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.account-layout .detail-card > h2,
+.account-layout .detail-section > h2,
+.account-layout summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding: 16px 20px;
+  background: var(--blue);
+}
+
+.account-layout .detail-card > h2,
+.account-layout .detail-section > h2,
+.account-layout .detail-disclosure[open] > summary {
+  border-bottom: 1px solid var(--line);
+}
+
+.account-layout .detail-body {
+  min-width: 0;
+  padding: 12px 20px;
+}
+
+.account-layout dl {
   margin: 0;
   font-size: 13px;
   line-height: 1.6;
 }
 
-.detail-card dl > div {
+.account-layout dl > div {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  align-items: baseline;
+  gap: 20px;
+  min-height: 40px;
+  padding: 8px 0;
+}
+
+.account-layout dl > div + div {
+  border-top: 1px solid var(--line);
+}
+
+.account-layout dt {
+  color: var(--muted);
+}
+
+.account-layout dd {
+  margin: 0;
+}
+
+.account-layout .detail-count {
+  flex: none;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.account-layout .profile-sections {
+  display: grid;
   gap: 12px;
-  margin-top: 8px;
 }
 
-.detail-card dt {
-  color: var(--muted);
+.account-layout summary {
+  cursor: pointer;
+  list-style: none;
 }
 
-.detail-card dd {
+.account-layout summary::-webkit-details-marker {
+  display: none;
+}
+
+.account-layout summary h2 {
+  flex: 1;
+  min-width: 0;
+}
+
+.account-layout summary::after {
+  content: "+";
+  flex: none;
+  width: 16px;
+  color: var(--accent);
+  text-align: center;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.account-layout details[open] > summary::after {
+  content: "−";
+}
+
+.account-layout .detail-list {
+  max-height: 280px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.account-layout ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 28px;
   margin: 0;
-}
-
-.detail-card ul {
-  margin: 0;
-  padding-left: 18px;
+  padding: 8px 0 8px 18px;
   font-size: 13px;
-  line-height: 1.8;
+  line-height: 1.6;
 }
 
-.detail-section {
-  margin: 24px 0;
+.account-layout .table-wrap {
+  width: 100%;
+  max-height: 360px;
+  overflow: auto;
 }
 
-.detail-section p {
+.account-layout .archive-table {
+  min-width: 640px;
+  table-layout: fixed;
+}
+
+.account-layout .archive-table th,
+.account-layout .archive-table td {
+  min-width: 0;
+  max-width: none;
+  padding: 12px 20px;
+}
+
+.account-layout .archive-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.account-layout .archive-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.account-layout .message-pagination {
+  flex-wrap: wrap;
+}
+
+.account-layout .message-pagination nav {
+  margin-left: auto;
+}
+
+.account-layout .detail-section > p {
+  margin: 0;
+  padding: 20px;
   color: var(--muted);
   font-size: 13px;
+}
+
+@media (max-width: 1000px) {
+  .account-layout ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 700px) {
@@ -1111,4 +1246,44 @@ button:disabled {
   .records-scroll {
     padding: 14px 12px;
   }
+
+  .account-layout {
+    gap: 16px;
+  }
+
+  .account-layout .detail-groups,
+  .account-layout ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .account-layout .detail-groups {
+    gap: 16px;
+  }
+
+  .account-layout .detail-card > h2,
+  .account-layout .detail-section > h2,
+  .account-layout summary {
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .account-layout .detail-body {
+    padding: 10px 16px;
+  }
+
+  .account-layout dl > div {
+    gap: 14px;
+  }
+
+  .account-layout .archive-table th,
+  .account-layout .archive-table td {
+    padding: 12px 16px;
+  }
+}
+
+.friend-history-note {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
 }

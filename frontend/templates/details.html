@@ -39,7 +39,6 @@
     <header class="messages-heading">
       <div class="messages-title">
         <h1 id="messages-title" tabindex="-1">{{.Title}}</h1>
-        {{if eq .Section "snaps"}}<p>Snap metadata from your export.{{if .Selected}} Conversation: {{.Selected.Key}} · <a class="text-link" href="/snaps">All snaps</a>{{end}}</p>{{end}}
         {{if eq .Section "calls"}}<p>Incoming and outgoing calls, with exported dates and durations in seconds.</p>{{end}}
         {{if eq .Section "account"}}<p>Account, device and profile information from your export.</p>{{end}}
       </div>
@@ -56,17 +55,16 @@
         {{template "account-details" .}}
       {{else if .RecordCount}}
         {{if eq .Section "friends"}}{{template "friends-table" .}}{{end}}
-        {{if eq .Section "snaps"}}{{template "snaps-table" .}}{{end}}
         {{if eq .Section "calls"}}{{template "calls-table" .}}{{end}}
       {{else}}
         <div class="empty-state">
-          <h2>No {{if .Query}}matching {{end}}{{if eq .Section "friends"}}friends{{else if eq .Section "snaps"}}snaps{{else}}calls{{end}}</h2>
+          <h2>No {{if .Query}}matching {{end}}{{if eq .Section "friends"}}friends{{else}}calls{{end}}</h2>
           <p>{{if or .Query .Filter}}Try another search or filter.{{else if .Offset}}Return to the previous page.{{else}}There are no records in this part of the archive.{{end}}</p>
         </div>
       {{end}}
     </div>
 
-    {{if not .Error}}{{template "records-pagination" .}}{{end}}
+    {{if and (not .Error) (ne .Section "account")}}{{template "records-pagination" .}}{{end}}
   </section>
 {{end}}
 
@@ -87,25 +85,13 @@
       <thead><tr><th scope="col">Username</th><th scope="col">Display name</th><th scope="col">Category</th><th scope="col">Created</th><th scope="col">Modified</th><th scope="col">Source</th></tr></thead>
       <tbody>
         {{range .Friends}}
-        <tr><td>{{.Username}}</td><td>{{.DisplayName}}</td><td>{{label .Category}}</td><td>{{.CreationTimestamp}}</td><td>{{.LastModifiedTimestamp}}</td><td>{{.Source}}</td></tr>
-        {{end}}
-      </tbody>
-    </table>
-  </div>
-{{end}}
-
-{{define "snaps-table"}}
-  <div class="table-wrap">
-    <table class="archive-table">
-      <caption class="sr-only">Snap history</caption>
-      <thead><tr><th scope="col">Date (UTC)</th><th scope="col">From</th><th scope="col">Conversation</th><th scope="col">Media type</th><th scope="col">Direction</th></tr></thead>
-      <tbody>
-        {{range .Snaps}}
         <tr>
-          <td><time {{if .DateTime}}datetime="{{.DateTime}}"{{end}}>{{.Day}} {{.Created}}</time></td>
-          <td>{{.From}}</td>
-          <td><a class="text-link" href="{{.ConversationURL}}">{{.ConversationName}}</a></td>
-          <td>{{.MediaType}}</td><td>{{if .Outgoing}}Outgoing{{else}}Incoming{{end}}</td>
+          <td>
+            {{if .ConversationID}}<a class="text-link" href="/?conversation={{.ConversationID}}">{{.Username}}</a>
+            {{else}}{{.Username}}<small class="friend-history-note">No chat history</small>{{end}}
+          </td>
+          <td>{{if and .ConversationID .DisplayName}}<a class="text-link" href="/?conversation={{.ConversationID}}">{{.DisplayName}}</a>{{else}}{{.DisplayName}}{{end}}</td>
+          <td>{{label .Category}}</td><td>{{.CreationTimestamp}}</td><td>{{.LastModifiedTimestamp}}</td><td>{{.Source}}</td>
         </tr>
         {{end}}
       </tbody>
@@ -128,68 +114,155 @@
 {{end}}
 
 {{define "account-details"}}
-  {{if not .Details}}
-    <div class="empty-state"><h2>No account details</h2><p>Account and profile information has not been imported.</p></div>
-  {{end}}
-
-  <div class="detail-groups">
-    {{range .Details}}
-    <section class="detail-card">
-      <h2>{{.Title}}</h2>
-      <dl>{{range .Fields}}<div><dt>{{.Label}}</dt><dd>{{if .Value}}{{.Value}}{{else}}—{{end}}</dd></div>{{end}}</dl>
-    </section>
-    {{end}}
-  </div>
-
-  {{if .Account}}
-    {{if .Account.DeviceHistory}}
-    <section class="detail-section">
-      <h2>Device history</h2>
-      <div class="table-wrap">
-        <table class="archive-table">
-          <thead><tr><th scope="col">Make</th><th scope="col">Model</th><th scope="col">Start time</th><th scope="col">Type</th></tr></thead>
-          <tbody>{{range .Account.DeviceHistory}}<tr><td>{{.Make}}</td><td>{{.Model}}</td><td>{{.StartTime}}</td><td>{{.DeviceType}}</td></tr>{{end}}</tbody>
-        </table>
+  <div class="account-layout">
+    {{if not .Details}}
+      <div class="empty-state">
+        <h2>No account details</h2>
+        <p>Account and profile information has not been imported.</p>
       </div>
-    </section>
     {{end}}
 
-    {{if .Account.LoginHistory}}
-    <section class="detail-section">
-      <h2>Login history</h2>
-      <div class="table-wrap">
-        <table class="archive-table">
-          <thead><tr><th scope="col">Date</th><th scope="col">IP</th><th scope="col">Country</th><th scope="col">Status</th><th scope="col">Device</th></tr></thead>
-          <tbody>{{range .Account.LoginHistory}}<tr><td>{{.Created}}</td><td>{{.IP}}</td><td>{{.Country}}</td><td>{{.Status}}</td><td>{{.Device}}</td></tr>{{end}}</tbody>
-        </table>
-      </div>
-    </section>
-    {{end}}
-  {{end}}
-
-  {{if .Profile}}
-    {{with .Profile}}
+    {{if .Details}}
     <div class="detail-groups">
-      {{if .Engagement}}<section class="detail-card"><h2>Engagement</h2><dl>{{range .Engagement}}<div><dt>{{.Event}}</dt><dd>{{.Occurrences}}</dd></div>{{end}}</dl></section>{{end}}
-      {{if .DiscoverChannelsViewed}}<section class="detail-card"><h2>Discover channels viewed</h2><ul>{{range .DiscoverChannelsViewed}}<li>{{.ChannelName}}</li>{{end}}</ul></section>{{end}}
-      {{if .AdsYouInteractedWith}}<section class="detail-card"><h2>Ads interacted with</h2><dl>{{range .AdsYouInteractedWith}}<div><dt>{{.AdvertiserName}}</dt><dd>{{.Date}}</dd></div>{{end}}</dl></section>{{end}}
-      {{if .BreakdownOfTimeSpentOnApp}}<section class="detail-card"><h2>Time spent on app</h2><ul>{{range .BreakdownOfTimeSpentOnApp}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
-      {{if .ContentCategories}}<section class="detail-card"><h2>Content categories</h2><ul>{{range .ContentCategories}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
-      {{if .Interactions.WebInteractions}}<section class="detail-card"><h2>Web interactions</h2><ul>{{range .Interactions.WebInteractions}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
-      {{if .Interactions.AppInteractions}}<section class="detail-card"><h2>App interactions</h2><ul>{{range .Interactions.AppInteractions}}<li>{{.}}</li>{{end}}</ul></section>{{end}}
+      {{range .Details}}
+      <section class="detail-card">
+        <h2>{{.Title}}</h2>
+        <div class="detail-body">
+          <dl>
+            {{range .Fields}}
+            <div><dt>{{.Label}}</dt><dd>{{if .Value}}{{.Value}}{{else}}—{{end}}</dd></div>
+            {{end}}
+          </dl>
+        </div>
+      </section>
+      {{end}}
     </div>
     {{end}}
-  {{end}}
 
-  <section class="detail-section">
-    <h2>Account history</h2>
-    {{if .Changes}}
-    <div class="table-wrap">
-      <table class="archive-table">
-        <thead><tr><th scope="col">Event</th><th scope="col">Date</th><th scope="col">Value</th><th scope="col">Status</th></tr></thead>
-        <tbody>{{range .Changes}}<tr><td>{{label .Kind}}</td><td>{{.Date}}</td><td>{{.Value}}</td><td>{{.Status}}</td></tr>{{end}}</tbody>
-      </table>
-    </div>
-    {{else}}<p>No account history on this page.</p>{{end}}
-  </section>
+    {{if .Account}}
+      {{if .Account.DeviceHistory}}
+      <section class="detail-section">
+        <h2>Device history <span class="detail-count">{{len .Account.DeviceHistory}} entries</span></h2>
+        <div class="table-wrap" tabindex="0">
+          <table class="archive-table">
+            <thead>
+              <tr><th scope="col">Make</th><th scope="col">Model</th><th scope="col">Start time</th><th scope="col">Type</th></tr>
+            </thead>
+            <tbody>
+              {{range .Account.DeviceHistory}}
+              <tr><td>{{.Make}}</td><td>{{.Model}}</td><td>{{.StartTime}}</td><td>{{.DeviceType}}</td></tr>
+              {{end}}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {{end}}
+
+      {{if .Account.LoginHistory}}
+      <section class="detail-section">
+        <h2>Login history <span class="detail-count">{{len .Account.LoginHistory}} entries</span></h2>
+        <div class="table-wrap" tabindex="0">
+          <table class="archive-table">
+            <thead>
+              <tr><th scope="col">Date</th><th scope="col">IP</th><th scope="col">Country</th><th scope="col">Status</th><th scope="col">Device</th></tr>
+            </thead>
+            <tbody>
+              {{range .Account.LoginHistory}}
+              <tr><td>{{.Created}}</td><td>{{.IP}}</td><td>{{.Country}}</td><td>{{.Status}}</td><td>{{.Device}}</td></tr>
+              {{end}}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      {{end}}
+    {{end}}
+
+    {{if .Profile}}
+      {{with .Profile}}
+      <div class="profile-sections">
+        {{if .Engagement}}
+        <details class="detail-disclosure">
+          <summary><h2>Engagement</h2><span class="detail-count">{{len .Engagement}} entries</span></summary>
+          <div class="detail-body detail-list" tabindex="0">
+            <dl>{{range .Engagement}}<div><dt>{{.Event}}</dt><dd>{{.Occurrences}}</dd></div>{{end}}</dl>
+          </div>
+        </details>
+        {{end}}
+
+        {{if .DiscoverChannelsViewed}}
+        <details class="detail-disclosure">
+          <summary><h2>Discover channels viewed</h2><span class="detail-count">{{len .DiscoverChannelsViewed}} entries</span></summary>
+          <div class="detail-body detail-list" tabindex="0">
+            <ul>{{range .DiscoverChannelsViewed}}<li>{{.ChannelName}}</li>{{end}}</ul>
+          </div>
+        </details>
+        {{end}}
+
+        {{if .AdsYouInteractedWith}}
+        <details class="detail-disclosure">
+          <summary><h2>Ads interacted with</h2><span class="detail-count">{{len .AdsYouInteractedWith}} entries</span></summary>
+          <div class="detail-body detail-list" tabindex="0">
+            <dl>{{range .AdsYouInteractedWith}}<div><dt>{{.AdvertiserName}}</dt><dd>{{.Date}}</dd></div>{{end}}</dl>
+          </div>
+        </details>
+        {{end}}
+
+        {{if .BreakdownOfTimeSpentOnApp}}
+        <details class="detail-disclosure">
+          <summary><h2>Time spent on app</h2><span class="detail-count">{{len .BreakdownOfTimeSpentOnApp}} entries</span></summary>
+          <div class="detail-body detail-list" tabindex="0">
+            <ul>{{range .BreakdownOfTimeSpentOnApp}}<li>{{.}}</li>{{end}}</ul>
+          </div>
+        </details>
+        {{end}}
+
+        {{if .ContentCategories}}
+        <details class="detail-disclosure">
+          <summary><h2>Content categories</h2><span class="detail-count">{{len .ContentCategories}} entries</span></summary>
+          <div class="detail-body detail-list" tabindex="0">
+            <ul>{{range .ContentCategories}}<li>{{.}}</li>{{end}}</ul>
+          </div>
+        </details>
+        {{end}}
+
+        {{if .Interactions.WebInteractions}}
+        <details class="detail-disclosure">
+          <summary><h2>Web interactions</h2><span class="detail-count">{{len .Interactions.WebInteractions}} entries</span></summary>
+          <div class="detail-body detail-list" tabindex="0">
+            <ul>{{range .Interactions.WebInteractions}}<li>{{.}}</li>{{end}}</ul>
+          </div>
+        </details>
+        {{end}}
+
+        {{if .Interactions.AppInteractions}}
+        <details class="detail-disclosure">
+          <summary><h2>App interactions</h2><span class="detail-count">{{len .Interactions.AppInteractions}} entries</span></summary>
+          <div class="detail-body detail-list" tabindex="0">
+            <ul>{{range .Interactions.AppInteractions}}<li>{{.}}</li>{{end}}</ul>
+          </div>
+        </details>
+        {{end}}
+      </div>
+      {{end}}
+    {{end}}
+
+    <section id="account-history" class="detail-section">
+      <h2>Account history</h2>
+      {{if .Changes}}
+      <div class="table-wrap" tabindex="0">
+        <table class="archive-table">
+          <thead>
+            <tr><th scope="col">Event</th><th scope="col">Date</th><th scope="col">Value</th><th scope="col">Status</th></tr>
+          </thead>
+          <tbody>
+            {{range .Changes}}
+            <tr><td>{{label .Kind}}</td><td>{{.Date}}</td><td>{{.Value}}</td><td>{{.Status}}</td></tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}<p>No account history on this page.</p>{{end}}
+      {{template "records-pagination" .}}
+    </section>
+  </div>
 {{end}}

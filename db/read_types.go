@@ -49,12 +49,14 @@ type Chat struct {
 	parser.Chat
 }
 
-// ChatPosition locates a chat in its conversation's newest-first ordering.
-// Offset counts newer chats, using descending ID to break timestamp ties.
-type ChatPosition struct {
+// MessagePosition locates a chat or snap in its conversation's newest-first ordering.
+// Offset counts newer records, using descending ID to break timestamp ties.
+type MessagePosition struct {
 	ConversationID int64
 	Offset         int
 }
+
+type ChatPosition = MessagePosition
 
 // Snap retains nullable metadata and adds database identifiers.
 type Snap struct {
@@ -87,10 +89,12 @@ type AccountChange struct {
 	Value  string
 }
 
-// Friend includes the imported friend category and database identifier.
+// Friend includes its category and the conversation matching its username.
+// ConversationID is zero when no matching conversation was imported.
 type Friend struct {
-	ID       int64
-	Category string
+	ID             int64
+	Category       string
+	ConversationID int64
 	parser.Friend
 }
 

@@ -82,6 +82,23 @@ func (d *DB) ListConversations(ctx context.Context, page Pagination) ([]Conversa
 	return readRows(ctx, d.conn, conversationSelect+" order by last_activity desc, v.id asc limit ? offset ?", []any{limit, offset}, scanConversation)
 }
 
+// ListSnapConversations lists conversations containing snaps by their latest snap.
+func (d *DB) ListSnapConversations(ctx context.Context, page Pagination) ([]Conversation, error) {
+	limit, offset, err := page.bounds()
+	if err != nil {
+		return nil, err
+	}
+
+	query := `select v.id, v.conversation_key,
+        (select count(*) from chats where conversation_id = v.id),
+        (select count(*) from snaps where conversation_id = v.id),
+        coalesce((select max(created_microseconds) from snaps where conversation_id = v.id), 0) as last_activity
+        from conversations v where exists (select 1 from snaps where conversation_id = v.id)
+        order by last_activity desc, v.id asc limit ? offset ?`
+
+	return readRows(ctx, d.conn, query, []any{limit, offset}, scanConversation)
+}
+
 // GetConversation returns sql.ErrNoRows when the ID does not exist.
 func (d *DB) GetConversation(ctx context.Context, id int64) (Conversation, error) {
 	if id <= 0 {
@@ -113,18 +130,28 @@ func (d *DB) ListChats(ctx context.Context, options MessageOptions) ([]Chat, err
 // GetChatPosition returns sql.ErrNoRows for a missing chat. The lookup uses the
 // same timestamp and ID ordering as ListChats without a search query.
 func (d *DB) GetChatPosition(ctx context.Context, id int64) (ChatPosition, error) {
+	return d.messagePosition(ctx, "chats", id)
+}
+
+// GetSnapPosition uses the same timestamp and ID ordering as ListSnaps.
+func (d *DB) GetSnapPosition(ctx context.Context, id int64) (MessagePosition, error) {
+	return d.messagePosition(ctx, "snaps", id)
+}
+
+// table is an internal constant supplied by the position methods above.
+func (d *DB) messagePosition(ctx context.Context, table string, id int64) (MessagePosition, error) {
 	if id <= 0 {
-		return ChatPosition{}, fmt.Errorf("%w: chat ID must be positive", ErrInvalidOptions)
+		return MessagePosition{}, fmt.Errorf("%w: message ID must be positive", ErrInvalidOptions)
 	}
 
-	var position ChatPosition
+	var position MessagePosition
 
 	err := d.conn.QueryRowContext(ctx, `select target.conversation_id,
-        (select count(*) from chats newer
+        (select count(*) from `+table+` newer
          where newer.conversation_id = target.conversation_id
          and (newer.created_microseconds > target.created_microseconds
               or (newer.created_microseconds = target.created_microseconds and newer.id > target.id)))
-        from chats target where target.id = ?`, id).Scan(&position.ConversationID, &position.Offset)
+        from `+table+` target where target.id = ?`, id).Scan(&position.ConversationID, &position.Offset)
 
 	return position, err
 }
@@ -205,7 +232,8 @@ func (d *DB) ListFriends(ctx context.Context, options FriendOptions) ([]Friend, 
 	}
 
 	query := `select f.id, f.category, f.username, f.display_name,
-        f.creation_timestamp, f.last_modified_timestamp, f.source from friends f`
+        f.creation_timestamp, f.last_modified_timestamp, f.source, coalesce(v.id, 0)
+        from friends f left join conversations v on v.conversation_key = f.username`
 
 	args := make([]any, 0, 4)
 
@@ -238,7 +266,7 @@ func (d *DB) ListFriends(ctx context.Context, options FriendOptions) ([]Friend, 
 	return readRows(ctx, d.conn, query, append(args, limit, offset), func(row rowScanner) (Friend, error) {
 		var f Friend
 
-		err := row.Scan(&f.ID, &f.Category, &f.Username, &f.DisplayName, &f.CreationTimestamp, &f.LastModifiedTimestamp, &f.Source)
+		err := row.Scan(&f.ID, &f.Category, &f.Username, &f.DisplayName, &f.CreationTimestamp, &f.LastModifiedTimestamp, &f.Source, &f.ConversationID)
 
 		return f, err
 	})
