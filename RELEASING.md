@@ -1,6 +1,6 @@
 # Releasing Snaparser
 
-The current release version is `1.0.0`, defined once in
+The current release version is `2.0.0`, defined once in
 `cmd/snaparser/main.go`. Release preparation creates local artifacts; publishing
 is a separate step after reviewing the draft release.
 
@@ -24,7 +24,7 @@ make release
 | macOS (`darwin`) | amd64, arm64 | `.tar.gz` |
 | Windows | amd64, arm64 | `.zip` |
 
-Artifacts are named `snaparser_1.0.0_<os>_<arch>` and placed in `dist/v1.0.0/`.
+Artifacts are named `snaparser_2.0.0_<os>_<arch>` and placed in `dist/v2.0.0/`.
 Each archive includes the binary, README and screenshots, changelog, example TOML,
 fictional JoJo demo export, project license, and frontend documentation/license.
 Only explicitly listed release files are
@@ -33,7 +33,7 @@ packaged; private exports, databases, and local configuration are excluded.
 Verify the checksums and run the binary from the archive for your platform:
 
 ```sh
-cd dist/v1.0.0
+cd dist/v2.0.0
 sha256sum -c SHA256SUMS
 # macOS: shasum -a 256 -c SHA256SUMS
 ```
@@ -49,9 +49,9 @@ platform remain useful before publishing.
 When the reviewed commit is ready:
 
 ```sh
-git tag -a v1.0.0 -m "Snaparser v1.0.0"
+git tag -a v2.0.0 -m "Snaparser v2.0.0"
 git push origin master
-git push origin v1.0.0
+git push origin v2.0.0
 ```
 
 Pushing a version tag triggers `.github/workflows/release.yml`. It reruns the

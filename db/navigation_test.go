@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/vanillaiice/snaparser/parser"
+	"github.com/vanillaiice/snaparser/v2/parser"
 )
 
 func TestFriendConversationMatchesUsername(t *testing.T) {

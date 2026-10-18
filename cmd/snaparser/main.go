@@ -16,12 +16,12 @@ import (
 	"time"
 
 	"github.com/urfave/cli/v3"
-	"github.com/vanillaiice/snaparser/db"
-	"github.com/vanillaiice/snaparser/frontend"
-	"github.com/vanillaiice/snaparser/parser"
+	"github.com/vanillaiice/snaparser/v2/db"
+	"github.com/vanillaiice/snaparser/v2/frontend"
+	"github.com/vanillaiice/snaparser/v2/parser"
 )
 
-const version = "1.0.0"
+const version = "2.0.0"
 
 func main() {
 	if err := newApp().Run(context.Background(), os.Args); err != nil {

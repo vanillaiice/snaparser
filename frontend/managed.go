@@ -15,8 +15,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/vanillaiice/snaparser/db"
-	"github.com/vanillaiice/snaparser/parser"
+	"github.com/vanillaiice/snaparser/v2/db"
+	"github.com/vanillaiice/snaparser/v2/parser"
 )
 
 // Archive owns a selectable archive, its viewer, and background import jobs.

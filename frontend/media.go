@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/vanillaiice/snaparser/parser"
+	"github.com/vanillaiice/snaparser/v2/parser"
 )
 
 type attachment struct {

@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0
+## 2.0.0
 
 ### Added
 
@@ -31,7 +31,8 @@
 
 ### Changed
 
-- The CLI now uses `import` and `serve`. The pre-1.0 parsing commands and flags
+- The Go module and package imports now use `github.com/vanillaiice/snaparser/v2`.
+- The CLI now uses `import` and `serve`. The pre-2.0 parsing commands and flags
   have been replaced; see the README for current usage.
 - Imports represent one complete backup. A new import replaces previous data;
   omitted sections of programmatic partial imports are cleared.

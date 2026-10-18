@@ -12,7 +12,7 @@ import (
 	"time"
 
 	"github.com/urfave/cli/v3"
-	"github.com/vanillaiice/snaparser/db"
+	"github.com/vanillaiice/snaparser/v2/db"
 )
 
 func writeConfig(t *testing.T, content string) string {
@@ -212,7 +212,7 @@ func TestImportRequiresDataAndVersionBypassesConfig(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if !strings.Contains(output.String(), "1.0.0") {
+	if !strings.Contains(output.String(), "snaparser version "+version) {
 		t.Fatalf("wrong release version: %s", output.String())
 	}
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/vanillaiice/snaparser/parser"
+	"github.com/vanillaiice/snaparser/v2/parser"
 )
 
 // GetAccount returns the account and its device/login histories from one

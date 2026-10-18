@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/vanillaiice/snaparser/db"
+	"github.com/vanillaiice/snaparser/v2/db"
 )
 
 const recordPageSize = 40

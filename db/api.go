@@ -9,7 +9,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/vanillaiice/snaparser/parser"
+	"github.com/vanillaiice/snaparser/v2/parser"
 )
 
 // Import atomically replaces application data with the supplied parsed backup.

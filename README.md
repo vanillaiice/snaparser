@@ -3,15 +3,46 @@
 Snaparser turns Snapchat exports into a searchable local archive.
 The parser, SQLite database, and HTMX frontend run in one Go binary.
 
-![Snaparser chats with a fictional JoJo-themed conversation and route-map attachment](docs/screenshots/chats.png)
+![Snaparser chats dummy conversation and route-map attachment](docs/screenshots/chats.png)
+
+## Existing solution
+
+Snapchat already provides a static website when downloading
+your [data](https://help.snapchat.com/hc/en-us/articles/7012305371156-How-do-I-download-my-data-from-Snapchat-).
+It can be used to view your login history, account info, snap
+& chat history metadata and a bunch of other useful stuff.
+However, there is no search or filtering.
+
+If you want to use it, run the command below:
+
+```
+$ python3 -m http.server --directory data/
+```
+> with data holding the content of your unzipped data
+
+If you want a more powerful ui, continue reading...
+
+## Installation
+
+Install with go:
+
+```sh
+$ go install github.com/vanillaiice/snaparser/v2/cmd/snaparser@latest
+```
+
+Or download from [releases](https://github.com/vanillaiice/snaparser/releases).
+
+## Usage
+
+Download and unzip your Snapchat export by following the guide on Snapchat's
+[website](https://help.snapchat.com/hc/en-us/articles/7012305371156-How-do-I-download-my-data-from-Snapchat-).
 
 Start the browser without supplying paths:
 
 ```sh
-go run ./cmd/snaparser serve
+$ snaparser serve
 # http://127.0.0.1:8080
 ```
-
 If there is no existing archive, the browser opens setup with an in-page folder
 browser.
 Browse to the unzipped Snapchat export and click **Use this folder**, or enter
@@ -27,15 +58,22 @@ The selected path is saved in the database and reused on later launches.
 To import immediately from the command line:
 
 ```sh
-go run ./cmd/snaparser serve --data ./data
+$ snaparser serve --data ./data
 ```
 
 `--data` requires the unchanged export root containing `json/` and `chat_media/`.
 Keep this directory in place: the viewer reads attachments from it. `--db` selects the
-SQLite path (default `snaparser.db`). To import without serving, use
-`snaparser import --data ./data --db snaparser.db`. Importing replaces the current
-backup only after all required JSON files parse successfully and additional JSON
-files validate. Missing directories, missing supported files, or invalid JSON
+SQLite path (default `snaparser.db`). To import without serving, then reuse the
+archive and its recorded media directory:
+
+```sh
+$ snaparser import --data ./data --db archive.db
+$ snaparser serve --db archive.db
+```
+
+Importing replaces the current backup only after all required JSON files parse
+successfully and additional JSON files validate. Missing directories, missing
+supported files, or invalid JSON
 abort the import without changing an existing archive.
 
 The browser includes:
@@ -58,37 +96,81 @@ All sections support ordinary links and forms as well as HTMX navigation, with
 System, Light, and Dark themes. See [frontend/README.md](frontend/README.md) for
 server integration and view behavior.
 
-# Demo and screenshots
+## Demo and screenshots
 
-The screenshots use a completely fictional export inspired by *JoJo's Bizarre
-Adventure*. Try the same conversations, friends, snaps, calls, and account details:
+The screenshots use a completely fictional export.
+Try the same conversations, friends, snaps, calls, and account details:
 
 ```sh
 go run ./cmd/snaparser serve --data ./examples/jojo --db ./jojo-demo.db
 # http://127.0.0.1:8080 — select stardust.crusaders
 ```
 
-The demo uses its own database. See [examples/jojo](examples/jojo/README.md) for
-details; its export also includes a route-map image and a travel checklist.
+## Configuration
 
-<details>
-<summary>More screenshots: friends, snap history, calls, and account</summary>
+Configuration is optional. Copy [snaparser.example.toml](snaparser.example.toml)
+to `snaparser.toml` in your working directory and edit it, or select another file:
 
-| Friends | Snap history (dark theme) |
-| --- | --- |
-| ![Friends with JoJo character names and links to their chats](docs/screenshots/friends.png) | ![Snap history in the dark theme](docs/screenshots/snaps.png) |
+```sh
+snaparser --config /path/to/archive.toml serve
+# --config also works after the subcommand:
+snaparser import --config /path/to/archive.toml --data /path/to/export
+```
 
-| Calls | Account |
-| --- | --- |
-| ![Fictional incoming and outgoing call history](docs/screenshots/calls.png) | ![Aligned account, device, and profile cards for the demo account](docs/screenshots/account.png) |
+Values take precedence in this order: **explicit CLI flags → TOML → built-in
+defaults**. A missing default `snaparser.toml` is fine. An explicitly selected
+missing file, invalid TOML, unsupported keys, and invalid setting types produce
+an error. Paths in both TOML and flags are relative to the working directory.
 
-</details>
+```toml
+data = ""
+db = "snaparser.db"
 
-# Architecture
+[server]
+listen = "127.0.0.1:8080"
+read_header_timeout = "5s"
+read_timeout = "15s"
+write_timeout = "30s"
+idle_timeout = "60s"
+shutdown_timeout = "5s"
+```
+
+These are the defaults. The server binds to loopback. An empty `data` value
+reuses an existing database when serving, or opens browser setup if the selected
+database is missing or has no imported archive. A missing database is created
+after a valid export is chosen.
+`import` requires a nonempty export path.
+**Setting `data` in TOML imports that export each time `serve` runs, replacing the
+selected archive.** Browser selections update the database's saved source; they
+do not rewrite your TOML file. To reuse the database while keeping that setting
+in the file:
+
+```sh
+snaparser serve --config archive.toml --data=""
+```
+
+Duration settings accept Go duration strings such as `500ms`, `30s`, and `2m`.
+HTTP timeouts accept `0s` to disable them; the shutdown timeout must be positive.
+TOML support uses [urfave/cli's official value-source integration](https://cli.urfave.org/v3/examples/flags/value-sources/).
+
+## Flags
+
+- `--config PATH`, `-c PATH`: TOML file, default `snaparser.toml` (global).
+- `--data PATH`: export root containing `json/` and `chat_media/`; needed for
+  `import` unless set in TOML, optional for `serve`.
+- `--db PATH`: SQLite archive, default `snaparser.db`.
+- `--listen ADDRESS`: viewer address, default `127.0.0.1:8080` (`serve` only).
+- `--read-header-timeout`, `--read-timeout`, `--write-timeout`,
+  `--idle-timeout`, `--shutdown-timeout`: override the matching `[server]`
+  duration setting (`serve` only).
+- `--version`: print the application version (`2.0.0`).
+- `--help`: show command-specific help.
+
+## Architecture
 
 The database represents one complete Snapchat backup at a time. Importing a new
 backup replaces all application data. There is no account matching, UPSERT,
-deduplication, or incremental synchronization.
+deduplication, or incremental synchronization (WIP I guess).
 
 The database API is:
 
@@ -151,110 +233,7 @@ retain their foreign keys to conversations. The initial schema and FTS migration
 describe this layout for new databases; an existing database that has already
 applied them would require a separate schema migration.
 
-# Existing solution
-
-Snapchat provides a static website when downloading your [data](https://help.snapchat.com/hc/en-us/articles/7012305371156-How-do-I-download-my-data-from-Snapchat-). It can be used
-to view your login history, account info, snap & chat history metadata and a
-bunch of other useful stuff. However, there is no search or filtering, and the
-ui is kinda boring.
-
-If you still want to use it, you can run the command below:
-
-```
-$ python3 -m http.server --directory data/
-```
-> with data holding the content of your unzipped data
-
-Else, continue reading...
-
-# Installation
-
-```
-$ go install github.com/vanillaiice/snaparser/cmd/snaparser@latest
-```
-
-# Usage
-
-To download your chat history data, follow the guide available on snapchat's 
-[website](https://help.snapchat.com/hc/en-us/articles/7012305371156-How-do-I-download-my-data-from-Snapchat-). 
-You can then do the following:
-
-```sh
-# Choose the export in the browser (or reuse an existing archive)
-snaparser serve
-
-# Import the unchanged export immediately and start the viewer
-snaparser serve --data /path/to/snapchat-export
-
-# Import without starting the viewer
-snaparser import --data /path/to/snapchat-export --db archive.db
-
-# Reuse the imported archive and its recorded media directory
-snaparser serve --db archive.db
-```
-
-# Configuration
-
-Configuration is optional. Copy [snaparser.example.toml](snaparser.example.toml)
-to `snaparser.toml` in your working directory and edit it, or select another file:
-
-```sh
-snaparser --config /path/to/archive.toml serve
-# --config also works after the subcommand:
-snaparser import --config /path/to/archive.toml --data /path/to/export
-```
-
-Values take precedence in this order: **explicit CLI flags → TOML → built-in
-defaults**. A missing default `snaparser.toml` is fine. An explicitly selected
-missing file, invalid TOML, unsupported keys, and invalid setting types produce
-an error. Paths in both TOML and flags are relative to the working directory.
-
-```toml
-data = ""
-db = "snaparser.db"
-
-[server]
-listen = "127.0.0.1:8080"
-read_header_timeout = "5s"
-read_timeout = "15s"
-write_timeout = "30s"
-idle_timeout = "60s"
-shutdown_timeout = "5s"
-```
-
-These are the defaults. The server binds to loopback. An empty `data` value
-reuses an existing database when serving, or opens browser setup if the selected
-database is missing or has no imported archive. A missing database is created
-after a valid export is chosen.
-`import` requires a nonempty export path.
-**Setting `data` in TOML imports that export each time `serve` runs, replacing the
-selected archive.** Browser selections update the database's saved source; they
-do not rewrite your TOML file. To reuse the database while keeping that setting
-in the file:
-
-```sh
-snaparser serve --config archive.toml --data=""
-```
-
-Duration settings accept Go duration strings such as `500ms`, `30s`, and `2m`.
-HTTP timeouts accept `0s` to disable them; the shutdown timeout must be positive.
-TOML support uses [urfave/cli's official value-source integration](https://cli.urfave.org/v3/examples/flags/value-sources/).
-
-# Flags
-
-- `--config PATH`, `-c PATH`: TOML file, default `snaparser.toml` (global).
-- `--data PATH`: export root containing `json/` and `chat_media/`; needed for
-  `import` unless set in TOML, optional for `serve`.
-- `--db PATH`: SQLite archive, default `snaparser.db`.
-- `--listen ADDRESS`: viewer address, default `127.0.0.1:8080` (`serve` only).
-- `--read-header-timeout`, `--read-timeout`, `--write-timeout`,
-  `--idle-timeout`, `--shutdown-timeout`: override the matching `[server]`
-  duration setting (`serve` only).
-- `--version`: print the application version (`1.0.0`).
-- `--help`: show command-specific help.
-
-
-# Development
+## Development
 
 ```sh
 make check
@@ -275,22 +254,22 @@ but their contents are not imported. Empty placeholder types marked TODO in
 `parser/types.go` still need nonempty export examples before their schemas and
 storage can be implemented; their contents are not stored or displayed.
 
-# Release preparation
+## Release preparation
 
 `make release` runs the checks and creates archives for Linux, macOS, and Windows
-on amd64 and arm64 under `dist/v1.0.0/`, including documentation, the example TOML,
+on amd64 and arm64 under `dist/v2.0.0/`, including documentation, the example TOML,
 licenses, screenshots, the fictional demo export, and `SHA256SUMS`. Packaging lives
 entirely in the Makefile and requires Go 1.26 or newer, Make, `tar`, `zip`, and
 either `sha256sum` or `shasum`. Normal builds need only Go.
 
 See [RELEASING.md](RELEASING.md) for the release procedure and
-[CHANGELOG.md](CHANGELOG.md) for the 1.0.0 release notes. The tag workflow creates
+[CHANGELOG.md](CHANGELOG.md) for the 2.0.0 release notes. The tag workflow creates
 a **draft** GitHub release for review; building locally does not publish anything.
 
-# Author
+## Author(s)
 
-vanillaiice
+vanillaiice & codex
 
-# License
+## License
 
 BSD-3-Clause

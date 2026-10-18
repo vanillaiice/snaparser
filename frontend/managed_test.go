@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/vanillaiice/snaparser/db"
-	"github.com/vanillaiice/snaparser/parser"
+	"github.com/vanillaiice/snaparser/v2/db"
+	"github.com/vanillaiice/snaparser/v2/parser"
 )
 
 func managedExport(t *testing.T, name, text string) string {

@@ -1,4 +1,4 @@
-module github.com/vanillaiice/snaparser
+module github.com/vanillaiice/snaparser/v2
 
 go 1.26.0
 

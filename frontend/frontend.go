@@ -21,8 +21,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/vanillaiice/snaparser/db"
-	"github.com/vanillaiice/snaparser/parser"
+	"github.com/vanillaiice/snaparser/v2/db"
+	"github.com/vanillaiice/snaparser/v2/parser"
 )
 
 //go:embed templates/*.html assets/*
