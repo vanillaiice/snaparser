@@ -98,13 +98,22 @@ server integration and view behavior.
 
 ## Demo and screenshots
 
-The screenshots use a completely fictional export.
-Try the same conversations, friends, snaps, calls, and account details:
+The screenshots use a completely fictional export included in every release
+archive under `examples/jojo/`. Download and extract an archive from
+[releases](https://github.com/vanillaiice/snaparser/releases), then run this from
+the extracted directory to try its conversations, friends, snaps, calls, and
+account details:
 
 ```sh
-go run ./cmd/snaparser serve --data ./examples/jojo --db ./jojo-demo.db
+./snaparser serve --data ./examples/jojo --db ./jojo-demo.db
 # http://127.0.0.1:8080 — select stardust.crusaders
 ```
+
+On Windows, use `.\snaparser.exe` in place of `./snaparser`. The demo uses a
+separate database. Keep `examples/jojo/` in place while browsing its attachments.
+The export is not embedded in the binary; users who installed with `go install`
+can download a release archive to get the demo files. See
+[examples/jojo/README.md](examples/jojo/README.md) for source checkout instructions.
 
 ## Configuration
 
