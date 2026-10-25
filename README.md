@@ -277,7 +277,7 @@ a **draft** GitHub release for review; building locally does not publish anythin
 
 ## Author(s)
 
-vanillaiice & codex
+vanillaiice & codex (from v2)
 
 ## License
 
